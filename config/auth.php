@@ -40,7 +40,23 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+
+        'lawyer' => [
+            'driver' => 'session',
+            'provider' => 'lawyers',
+        ],
+
+        'collector' => [
+            'driver' => 'session',
+            'provider' => 'collectors',
+        ],
+
+        'merchant' => [
+            'driver' => 'session',
+            'provider' => 'merchants',
+        ],
     ],
+
 
     /*
     |--------------------------------------------------------------------------
@@ -62,13 +78,23 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => env('AUTH_MODEL', App\Models\User::class),
+            'model' => App\Models\User::class,
         ],
 
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+        'lawyers' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\User::class,
+        ],
+
+        'collectors' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\User::class,
+        ],
+
+        'merchants' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\User::class,
+        ],
     ],
 
     /*

@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html dir="rtl">
 
 @include('dashboard.partials.head')
 
 <body>
 
 
-    @yield('contact')
+    @yield('Content')
 
 </body>
 

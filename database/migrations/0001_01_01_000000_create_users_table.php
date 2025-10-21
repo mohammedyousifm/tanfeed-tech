@@ -17,6 +17,20 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+
+            // ✅ New Columns
+            $table->enum('role', ['lawyer', 'collector', 'merchant'])
+                ->default('merchant')
+                ->comment('User role: admin, lawyer, collector, or merchant');
+
+            $table->enum('status', ['active', 'pending', 'suspended'])
+                ->default('active')
+                ->comment('Account status');
+
+            $table->boolean('terms_accepted')
+                ->default(false)
+                ->comment('User agreed to terms and privacy policy');
+
             $table->rememberToken();
             $table->timestamps();
         });
