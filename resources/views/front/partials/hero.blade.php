@@ -14,9 +14,17 @@
                 </p>
 
                 <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-                    <a href="{{ route('register') }}" class="btn btn-green text-base flex-center gap-2">
-                        ابدأ الآن
-                    </a>
+                    @auth
+                        <a href="{{ route(Auth::user()->role . '.dashboard') }}"
+                            class="btn btn-green text-base flex-center gap-2">
+                            لوحه
+                            التحكم
+                        </a>
+                    @else
+                        <a href="{{ route('register') }}" class="btn btn-green text-base flex-center gap-2">
+                            ابدأ الآن
+                        </a>
+                    @endauth
                     <a href="#services" class="btn btn-yellow text-base flex-center gap-2">
                         تعرف على خدماتنا
                     </a>
@@ -29,6 +37,7 @@
                     <img class="rounded-md" src="{{ asset('landing/logo/font-1.png') }}" alt="" srcset="">
                 </div>
             </div>
+
 
         </div>
     </div>

@@ -81,7 +81,7 @@
                             </div>
                         </div>
 
-                        <button type="submit" class="btn btn-green w-full text-base py-3">
+                        <button type="submit" class="btn prevent-double btn-green w-full text-base py-3">
                             <i class="fas fa-check-circle ml-2"></i> حفظ البيانات
                         </button>
                     </form>

@@ -6,8 +6,14 @@
 <body>
 
 
+
+
+
+
     @yield('Content')
 
+
+    @include('dashboard.partials.footer')
 </body>
 
 </html>

@@ -1,14 +1,29 @@
 @extends('dashboard.partials.app')
-@section('title', 'لوحة تحكم المحصل')
+@section('title', 'لوحة تحكم')
 
 @section('Content')
-    <div class="container py-20 text-center">
-        <div class="bg-white shadow-soft rounded-lg p-10">
-            <h1 class="text-3xl font-bold text-green mb-4">لوحة تحكم المحصل</h1>
-            <p class="text-gray-600 text-lg">
-                مرحبًا بك في لوحة التحكم الخاصة بالمحصل، يمكنك من هنا استعراض القضايا المحالة إليك
-                وتحديث حالة التحصيل وتتبع المهام اليومية بكل سهولة ووضوح.
-            </p>
-        </div>
+
+    <!-- Sidebar Overlay for Mobile -->
+    <div id="sidebarOverlay" class="sidebar-overlay fixed inset-0 bg-black bg-opacity-50 lg:hidden z-40"></div>
+
+    <!-- Sidebar -->
+    @include('dashboard.partials.sidebar')
+
+    <!-- Main Content Area -->
+    <div id="mainContent" class="main-content lg:mr-64 transition-all duration-300">
+        <!-- Header -->
+        @include('dashboard.partials.header')
+
+        <!-- Main Content -->
+        <main class="p-4 lg:p-6">
+            <!-- Stats Cards -->
+            @include('dashboard.partials.stats-cards')
+
+            <!-- Charts Section -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+
+            </div>
+        </main>
     </div>
+
 @endsection

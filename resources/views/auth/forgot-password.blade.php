@@ -51,7 +51,7 @@
                         </div>
 
 
-                        <div class="flex items-center justify-start mt-3">
+                        <div class="flex prevent-double items-center justify-start mt-3">
                             <x-primary-button>
                                 {{ __('  إرسال رابط إعادة التعيين') }}
                             </x-primary-button>

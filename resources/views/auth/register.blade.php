@@ -75,7 +75,7 @@
                         </div>
 
                         <!-- Submit Button -->
-                        <button type="submit" class="btn btn-green w-full text-base py-3">
+                        <button type="submit" class="btn prevent-double btn-green w-full text-base py-3">
                             <i class="fas fa-check-circle ml-2"></i>
                             إنشاء الحساب
                         </button>
@@ -84,7 +84,8 @@
                         <div class="text-center pt-4 border-t border-gray-200">
                             <p class="text-sm text-gray-600">
                                 لديك حساب بالفعل؟
-                                <a href="login.html" class="text-green font-semibold hover:underline">تسجيل الدخول</a>
+                                <a href="{{ route('login') }}" class="text-green font-semibold hover:underline">تسجيل
+                                    الدخول</a>
                             </p>
                         </div>
                     </form>

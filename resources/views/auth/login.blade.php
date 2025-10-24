@@ -26,7 +26,7 @@
                                 <i class="fas fa-envelope text-green ml-2"></i>
                                 البريد الإلكتروني
                             </label>
-                            <input type="email" id="email" name="email" class="form-input" placeholder="example@domain.com"
+                            <input type="email" id="email" name="email" class="form-input" placeholder=" البريد الإلكتروني"
                                 required>
                             <x-input-error :messages="$errors->get('email')" class="mt-2" />
                         </div>
@@ -60,7 +60,7 @@
                         </div>
 
                         <!-- Submit Button -->
-                        <button type="submit" class="btn btn-green w-full text-base py-3">
+                        <button type="submit" class="btn prevent-double btn-green w-full text-base py-3">
                             <i class="fas fa-sign-in-alt ml-2"></i>
                             تسجيل الدخول
                         </button>
