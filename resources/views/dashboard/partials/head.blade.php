@@ -14,6 +14,8 @@
 
     <link rel="stylesheet" href="{{ asset('landing/style.css') }}">
 
+    <link rel="stylesheet" href="{{ asset('dashboard/style.css') }}">
+
     <style>
         .border-green {
             border: 2px solid var(--color-green);

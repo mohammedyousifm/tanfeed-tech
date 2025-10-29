@@ -32,3 +32,16 @@
         </div>
     </div>
 </header>
+
+<style>
+    #toggleSidebar {
+        display: none;
+    }
+
+    @media screen and (max-width: 1024px) {
+        #toggleSidebar {
+            display: block;
+        }
+
+    }
+</style>

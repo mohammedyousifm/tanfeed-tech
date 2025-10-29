@@ -38,7 +38,8 @@
                     <table class="data-table">
                         <thead>
                             <tr>
-                                <th>رقم الشكوى</th>
+                                <th></th>
+                                <th>رقم الطلب</th>
                                 <th>اسم العميل</th>
                                 <th>رقم العقد</th>
                                 <th>الخدمة المطلوبة</th>
@@ -54,7 +55,8 @@
 
                             @foreach ($complaints as $complaint)
                                 <tr>
-                                    <td>{{ $complaint->serial_number }}</td>
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td>{{ $complaint->serial_number }}#</td>
                                     <td class="font-semibold">{{ $complaint->client_name }}</td>
                                     <td>{{ $complaint->contract_number }}</td>
                                     <td>{{ $complaint->service_requested }}</td>
@@ -66,7 +68,8 @@
                                     <td><span class="status-badge status-active">{{$complaint->status_label }}</span>
                                     </td>
 
-                                    <td><a href="">التحصيلات</a></span>
+                                    <td><a
+                                            href="{{ route('merchant.complaints.collections', $complaint->id) }}">التحصيلات</a></span>
                                     </td>
 
                                     <td>
@@ -75,9 +78,6 @@
 
                                     <td>
                                         <div class="flex gap-2">
-                                            <button class="action-btn view" title="عرض" onclick="viewClient(1)">
-                                                <i class="fas fa-eye"></i>
-                                            </button>
                                             <button class="action-btn edit" title="تعديل">
                                                 <i class="fas fa-edit"></i>
                                             </button>
@@ -88,8 +88,7 @@
                                     </td>
                                 </tr>
                             @endforeach
-                        </tbody>
-                    </table>
+                            </tbody> </table>
                 </div>
 
                 <!-- Pagination -->

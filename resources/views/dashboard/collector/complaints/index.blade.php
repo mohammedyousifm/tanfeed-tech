@@ -28,7 +28,9 @@
                     <table class="data-table">
                         <thead>
                             <tr>
-                                <th>رقم الشكوى</th>
+                                <th>#</th>
+                                <th>رقم الطلب</th>
+                                <th>اسم التاجر</th>
                                 <th>اسم العميل</th>
                                 <th>رقم العقد</th>
                                 <th>الخدمة المطلوبة</th>
@@ -37,14 +39,17 @@
                                 <th>الحالة</th>
                                 <th>المتابعات</th>
                                 <th>التحصيلات</th>
-                                <th>الإجراءات</th>
                             </tr>
                         </thead>
                         <tbody id="tableBody">
 
                             @foreach ($complaints as $complaint)
-                                <tr>
+                                <tr onclick="window.location='{{ route('collector.complaints.show', $complaint->id) }}'"
+                                    class="cursor-pointer hover:bg-gray-50 transition">
+                                    <!-- ID -->
+                                    <td class="px-3 py-2 text-center text-gray-700">{{ $loop->iteration }}</td>
                                     <td>{{ $complaint->serial_number }}</td>
+                                    <td class="px-3 py-2 text-gray-600">{{ $complaint->user->name }}</td>
                                     <td class="font-semibold">{{ $complaint->client_name }}</td>
                                     <td>{{ $complaint->contract_number }}</td>
                                     <td>{{ $complaint->service_requested }}</td>
@@ -56,12 +61,12 @@
                                     <td>
                                         <button
                                             class="status-badge status-active px-3 py-1 rounded-full text-sm font-semibold
-                                                                                                                                                                                                            @if($complaint->status == 'pending') bg-yellow-100 text-yellow-700
-                                                                                                                                                                                                            @elseif($complaint->status == 'in_progress') bg-blue-100 text-blue-700
-                                                                                                                                                                                                            @elseif($complaint->status == 'completed') bg-green-100 text-green-700
-                                                                                                                                                                                                            @elseif($complaint->status == 'cancelled') bg-red-100 text-red-700
-                                                                                                                                                                                                            @else bg-gray-100 text-gray-700 @endif
-                                                                                                                                                                                                        transition hover:opacity-80"
+                                                                                                                                                                                                                                                                                                    @if($complaint->status == 'pending') bg-yellow-100 text-yellow-700
+                                                                                                                                                                                                                                                                                                    @elseif($complaint->status == 'in_progress') bg-blue-100 text-blue-700
+                                                                                                                                                                                                                                                                                                    @elseif($complaint->status == 'completed') bg-green-100 text-green-700
+                                                                                                                                                                                                                                                                                                    @elseif($complaint->status == 'cancelled') bg-red-100 text-red-700
+                                                                                                                                                                                                                                                                                                    @else bg-gray-100 text-gray-700 @endif
+                                                                                                                                                                                                                                                                                                transition hover:opacity-80"
                                             onclick="openStatusModal({{ $complaint->id }}, '{{ $complaint->status }}')">
                                             {{ $complaint->status_label }}
                                         </button>
@@ -73,16 +78,6 @@
                                     <td><a href="{{ route('collector.complaints.collections', $complaint->id) }}">التحصيلات</a>
                                     </td>
 
-                                    <td>
-                                        <div class="flex gap-2">
-                                            <button class="action-btn view" title="عرض" onclick="viewClient(1)">
-                                                <i class="fas fa-eye"></i>
-                                            </button>
-                                            <button class="action-btn edit" title="تعديل">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                        </div>
-                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>

@@ -26,6 +26,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'email',
         'role',
         'status',
+        'last_login_at',
         'terms_accepted',
         'password',
     ];
@@ -73,5 +74,20 @@ class User extends Authenticatable implements MustVerifyEmail
             $lastClient = User::max('client_number');
             $user->client_number = $lastClient ? $lastClient + 1 : 1000;
         });
+    }
+
+    public function getStatusLabelAttribute()
+    {
+        return match ($this->status) {
+            'pending'     => 'قيد المراجعة',
+            'active' => 'مفعل',
+            'suspended' => 'معلق',
+            default       => 'غير محدد',
+        };
+    }
+
+    public function companyinfo()
+    {
+        return $this->hasOne(CompanyProfile::class);
     }
 }

@@ -5,7 +5,7 @@
             <!-- Company Info -->
             <div class="text-center md:text-right">
                 <div class="flex items-center justify-center md:justify-start gap-2 mb-4">
-                    <div class="w-20 h-20 bg-yellow rounded-md flex-center">
+                    <div class="w-20 h-20 bg-yellow p-1 rounded-md flex-center">
                         <img src="{{ asset('landing/logo/tlogo.png') }}" width="90" alt="logo" srcset="">
                     </div>
 

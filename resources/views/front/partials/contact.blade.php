@@ -11,10 +11,15 @@
         box-shadow: 0 10px 25px rgba(29, 153, 66, 0.3);
     }
 
+    .label-field {
+        font-size: 14px;
+    }
+
     .input-field {
         border: 2px solid #e5e7eb;
         border-radius: var(--radius-sm);
         transition: var(--transition);
+        font-size: 13px;
     }
 
     .input-field:focus {
@@ -36,7 +41,6 @@
     }
 
     .icon-wrapper {
-        background: linear-gradient(135deg, var(--color-green), #25b855);
         border-radius: var(--radius-sm);
         width: 50px;
         height: 50px;
@@ -81,7 +85,7 @@
                 <!-- Phone Card -->
                 <div class="contact-card p-6">
                     <div class="flex items-start gap-4">
-                        <div class="icon-wrapper">
+                        <div class="icon-wrapper bg-[#e2d392]">
                             <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
@@ -98,7 +102,7 @@
                 <!-- Email Card -->
                 <div class="contact-card p-6">
                     <div class="flex items-start gap-4">
-                        <div class="icon-wrapper">
+                        <div class="icon-wrapper bg-[#e2d392]">
                             <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
@@ -115,7 +119,7 @@
                 <!-- Location Card -->
                 <div class="contact-card p-6">
                     <div class="flex items-start gap-4">
-                        <div class="icon-wrapper">
+                        <div class="icon-wrapper bg-[#e2d392]">
                             <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
@@ -137,39 +141,28 @@
                 <h3 class="text-1xl font-bold mb-6" style="color: var(--color-black)">أرسل لنا رسالة</h3>
                 <form id="contactForm" class="space-y-5">
                     <div>
-                        <label class="block text-gray-700 font-semibold mb-2">الاسم الكامل</label>
-                        <input type="text" class="input-field w-full px-4 py-3" placeholder="أدخل اسمك الكامل" required>
+                        <label class="label-field block text-gray-700 font-semibold mb-2">الاسم الكامل</label>
+                        <input type="text" class="input-field w-full px-4 py-2" placeholder="أدخل اسمك الكامل" required>
                     </div>
 
                     <div>
-                        <label class="block text-gray-700 font-semibold mb-2">البريد الإلكتروني</label>
-                        <input type="email" class="input-field w-full px-4 py-3" placeholder="example@email.com"
+                        <label class="label-field block text-gray-700 font-semibold mb-2">البريد الإلكتروني</label>
+                        <input type="email" class="input-field w-full px-4 py-2" placeholder="example@email.com"
                             required>
                     </div>
 
                     <div>
-                        <label class="block text-gray-700 font-semibold mb-2">رقم الهاتف</label>
-                        <input type="tel" class="input-field w-full px-4 py-3" placeholder="+966 XX XXX XXXX" required>
+                        <label class="label-field block text-gray-700 font-semibold mb-2">رقم الهاتف</label>
+                        <input type="tel" class="input-field w-full px-4 py-2" placeholder="+966 XX XXX XXXX" required>
                     </div>
 
                     <div>
-                        <label class="block text-gray-700 font-semibold mb-2">الموضوع</label>
-                        <select class="input-field w-full px-4 py-3" required>
-                            <option value="">اختر الموضوع</option>
-                            <option value="complaint">شكوى جديدة</option>
-                            <option value="case">استفسار عن قضية</option>
-                            <option value="support">دعم فني</option>
-                            <option value="other">أخرى</option>
-                        </select>
-                    </div>
-
-                    <div>
-                        <label class="block text-gray-700 font-semibold mb-2">الرسالة</label>
-                        <textarea class="input-field w-full px-4 py-3 resize-none" rows="5"
+                        <label class="label-field block text-gray-700 font-semibold mb-2">الرسالة</label>
+                        <textarea class="input-field w-full px-4 py-2 resize-none" rows="4"
                             placeholder="اكتب رسالتك هنا..." required></textarea>
                     </div>
 
-                    <button type="submit" class="btn-primary w-full py-2 rounded-lg font-bold text-sm">
+                    <button type="submit" class="bg-[#e2d392] w-full py-2 rounded-lg font-bold text-sm">
                         إرسال الرسالة
                     </button>
                 </form>

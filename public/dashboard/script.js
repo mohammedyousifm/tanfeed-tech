@@ -1,43 +1,56 @@
 
-        $(document).ready(function() {
-            const $sidebar = $('#sidebar');
-            const $overlay = $('#sidebarOverlay');
-            const $mainContent = $('#mainContent');
-            const $toggleBtn = $('#toggleSidebar');
-            const $closeBtn = $('#closeSidebar');
+   $(document).ready(function() {
+    const $sidebar = $('#sidebar');
+    const $overlay = $('#sidebarOverlay');
+    const $mainContent = $('#mainContent');
+    const $toggleBtn = $('#toggleSidebar');
+    const $closeBtn = $('#closeSidebar');
 
-            // Toggle sidebar
-            $toggleBtn.on('click', function() {
-                if ($(window).width() < 1024) {
-                    $sidebar.toggleClass('collapsed');
-                    $overlay.toggleClass('active');
-                } else {
-                    $sidebar.toggleClass('collapsed');
-                    $mainContent.toggleClass('expanded');
-                }
-            });
+    // ✅ Initialize sidebar visibility on page load
+    function setInitialSidebarState() {
+        if ($(window).width() < 1024) {
+            $sidebar.addClass('collapsed');
+            $overlay.removeClass('active');
+            $mainContent.removeClass('expanded');
+        } else {
+            $sidebar.removeClass('collapsed');
+            $overlay.removeClass('active');
+            $mainContent.addClass('expanded');
+        }
+    }
 
-            // Close sidebar on overlay click
-            $overlay.on('click', function() {
-                $sidebar.addClass('collapsed');
-                $overlay.removeClass('active');
-            });
+    // Run on load
+    setInitialSidebarState();
 
-            // Close sidebar button
-            $closeBtn.on('click', function() {
-                $sidebar.addClass('collapsed');
-                $overlay.removeClass('active');
-            });
+    // ✅ Toggle sidebar (mobile vs desktop)
+    $toggleBtn.on('click', function() {
+        if ($(window).width() < 1024) {
+            $sidebar.toggleClass('collapsed');
+            $overlay.toggleClass('active');
+        } else {
+            $sidebar.toggleClass('collapsed');
+            $mainContent.toggleClass('expanded');
+        }
+    });
 
+    // ✅ Close sidebar when overlay clicked
+    $overlay.on('click', function() {
+        $sidebar.addClass('collapsed');
+        $overlay.removeClass('active');
+    });
 
-            // Handle window resize
-            $(window).on('resize', function() {
-                if ($(window).width() >= 1024) {
-                    $sidebar.removeClass('collapsed');
-                    $overlay.removeClass('active');
-                }
-            });
-        });
+    // ✅ Close sidebar when close button clicked
+    $closeBtn.on('click', function() {
+        $sidebar.addClass('collapsed');
+        $overlay.removeClass('active');
+    });
+
+    // ✅ Handle window resize (reset layout)
+    $(window).on('resize', function() {
+        setInitialSidebarState();
+    });
+});
+
 
 
 

@@ -26,4 +26,25 @@ class ComplaintController extends Controller
 
         return view('dashboard.collector.complaints.index', compact('complaints', 'user'));
     }
+
+    /**
+     * Display the specified complaint with merchant details.
+     */
+    public function show($id)
+    {
+        $user = Auth::user();
+
+        // Load complaint with related merchant (user)
+        $complaint = Complaint::with('user')->findOrFail($id);
+
+        // If you named relation differently, e.g. merchant(), adjust this:
+        $merchant = $complaint->user;
+
+        // Optional: handle case when merchant is missing
+        if (!$merchant) {
+            return redirect()->back()->with('error', 'لم يتم العثور على بيانات التاجر المرتبطة بهذه الشكوى.');
+        }
+
+        return view('dashboard.lawyer.complaints.show', compact('complaint', 'merchant', 'user'));
+    }
 }

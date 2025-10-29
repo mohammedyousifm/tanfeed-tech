@@ -13,6 +13,7 @@ Route::middleware(['auth', 'collector'])->group(function () {
 
     // complaints
     Route::get('/collector/complaints', [ComplaintController::class, 'index'])->name('collector.complaints.index');
+    Route::get('/collector/complaints/{id}/show', [ComplaintController::class, 'show'])->name('collector.complaints.show');
 
     // Follow Up
     Route::get('/collector/complaints/{id}/followup', [FollowUpController::class, 'index'])->name('collector.complaints.followup');

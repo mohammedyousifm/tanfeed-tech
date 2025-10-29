@@ -12,7 +12,19 @@
             <a href="{{ route('lawyer.complaints.index') }}"
                 class="nav-link flex items-center space-x-3 space-x-reverse p-3 rounded-md text-gray-700">
                 <i class="fas fa-chart-bar text-green text-lg w-5"></i>
-                <span class="font-medium">الفواتير</span>
+                <span class="font-medium">الطلبات</span>
+            </a>
+
+            <a href="{{ route('lawyer.collectors.index') }}"
+                class="nav-link flex items-center space-x-3 space-x-reverse p-3 rounded-md text-gray-700">
+                <i class="fas fa-users text-green text-lg w-5"></i>
+                <span class="font-medium">المحصلين</span>
+            </a>
+
+            <a href="{{ route('lawyer.merchant.index') }}"
+                class="nav-link flex items-center space-x-3 space-x-reverse p-3 rounded-md text-gray-700">
+                <i class="fa-solid fa-briefcase text-green text-lg w-5"></i>
+                <span class="font-medium">التجار</span>
             </a>
 
             <li>
@@ -96,7 +108,7 @@
             <a href="{{ route('merchant.complaints.index') }}"
                 class="nav-link flex items-center space-x-3 space-x-reverse p-3 rounded-md text-gray-700">
                 <i class="fas fa-chart-bar text-green text-lg w-5"></i>
-                <span class="font-medium">الفواتير</span>
+                <span class="font-medium">الطلبات</span>
             </a>
 
             <li>
@@ -125,7 +137,8 @@
                 </a>
             </li>
             <li>
-                <a href="#" class="nav-link flex items-center space-x-3 space-x-reverse p-3 rounded-md text-gray-700">
+                <a href="{{ route('merchant.settings.index') }}"
+                    class="nav-link flex items-center space-x-3 space-x-reverse p-3 rounded-md text-gray-700">
                     <i class="fas fa-cog text-green text-lg w-5"></i>
                     <span class="font-medium">الإعدادات</span>
                 </a>

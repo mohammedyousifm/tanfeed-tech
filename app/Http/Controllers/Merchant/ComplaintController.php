@@ -45,13 +45,15 @@ class ComplaintController extends Controller
             $data = $request->validate([
                 'client_name' => 'required|string|max:255',
                 'client_national_id' => 'nullable|string|max:50',
+                'phone_number1' => 'required|string|max:50',
+                'phone_number2' => 'nullable|string|max:50',
                 'commercial_name' => 'nullable|string|max:255',
                 'commercial_record_number' => 'nullable|string|max:50',
                 'contract_number' => 'nullable|string|max:50',
-                'amount_requested' => 'nullable|numeric|min:0',
-                'amount_paid' => 'nullable|numeric|min:0',
-                'amount_remaining' => 'nullable|numeric|min:0',
-                'service_requested' => 'nullable|string|max:255',
+                'amount_requested' => 'required|numeric|min:0',
+                'amount_paid' => 'required|numeric|min:0',
+                'amount_remaining' => 'required|numeric|min:0',
+                'service_requested' => 'required|string|max:255',
                 'contract_attachments' => 'nullable|array',
                 'contract_attachments.*' => 'file|mimes:pdf,doc,docx,jpg,jpeg,png|max:10240',
                 'collector_ids' => 'nullable|array',
@@ -78,8 +80,8 @@ class ComplaintController extends Controller
             }
 
             // Send email
-            Mail::to('mahmadyasaf020@gmail.com')
-                ->send(new NewComplaintNotification($complaint));
+            // Mail::to('mahmadyasaf020@gmail.com')
+            //     ->send(new NewComplaintNotification($complaint));
 
             return redirect()
                 ->route('merchant.complaints.index')
@@ -97,6 +99,8 @@ class ComplaintController extends Controller
                 ->with('error', 'حدث خطأ أثناء إنشاء الشكوى. الرجاء المحاولة لاحقًا.');
         }
     }
+
+
 
     /**
      * Display the specified resource.

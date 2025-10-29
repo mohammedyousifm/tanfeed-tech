@@ -33,10 +33,7 @@
                                 <th class="px-4 py-3 border-b">تاريخ التحصيل</th>
                                 <th class="px-4 py-3 border-b">المبلغ المتحصل</th>
                                 <th class="px-4 py-3 border-b">صورة التحويل ( مرفق)</th>
-                                <th class="px-4 py-3 border-b">نسبة تنفيذ تك</th>
                                 <th class="px-4 py-3 border-b">اسم المحصل</th>
-                                <th class="px-4 py-3 border-b">صورة تحويل النسبة من قبل التاجر
-                                </th>
                             </tr>
                         </thead>
 
@@ -70,37 +67,10 @@
                                     </td>
 
 
-
-                                    <td class="px-4 py-3 whitespace-nowrap">
-                                        @if($collection->tanfeed_fee)
-                                            {{ number_format($collection->tanfeed_fee, 0) }} ريال
-                                        @else
-                                            <span class="text-gray-400">لا يوجد</span>
-                                        @endif
-                                    </td>
-
                                     <td class="px-4 py-3 whitespace-nowrap">
                                         <span class="text-green font-semibold">{{ $collection->collector->name }}</span>
                                     </td>
 
-                                    {{-- tanfeed_receipt --}}
-                                    <td class="px-4 py-3">
-                                        <div class="flex flex-col gap-1">
-                                            @if($collection->tanfeed_receipt)
-                                                <a href="{{ asset('storage/' . $collection->tanfeed_receipt) }}" target="_blank"
-                                                    class="text-yellow-600 hover:underline flex items-center gap-1">
-                                                    <i class="fas fa-file-invoice-dollar"></i>
-                                                    <span>عرض إيصال تنفيذ تك</span>
-                                                </a>
-                                            @else
-                                                <button type="button" onclick="openTanfeedModal({{ $collection->id }})"
-                                                    class="text-green-600 hover:underline flex items-center gap-1">
-                                                    <i class="fas fa-upload"></i>
-                                                    <span>رفع إيصال تنفيذ تك</span>
-                                                </button>
-                                            @endif
-                                        </div>
-                                    </td>
 
 
                                 </tr>
@@ -154,21 +124,6 @@
                             <input type="file" name="collection_receipt"
                                 class="w-full border-gray-300 rounded-md shadow-sm focus:ring-green focus:border-green">
                         </div>
-
-                        <div class="mb-4">
-                            <label class="block mb-1 text-gray-700 font-semibold">نسبة تنفيذ تك (اختياري)</label>
-                            <input type="number" step="0.01" name="tanfeed_fee"
-                                class="w-full border-gray-300 rounded-md shadow-sm focus:ring-green focus:border-green"
-                                placeholder="المبلغ المخصص لتنفيذ تك">
-                        </div>
-
-                        <div class="mb-4">
-                            <label class="block mb-1 text-gray-700 font-semibold">إيصال تحويل النسبة من التاجر
-                                (اختياري)</label>
-                            <input type="file" name="tanfeed_receipt"
-                                class="w-full border-gray-300 rounded-md shadow-sm focus:ring-green focus:border-green">
-                        </div>
-
 
                         <div class="flex justify-end gap-3">
                             <button type="button" id="closeCollectionModalBtn"

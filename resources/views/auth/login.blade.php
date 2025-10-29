@@ -3,17 +3,18 @@
 @section('contain')
 
     <!-- Login Form Section -->
-    <section class="py-12 md:py-16 min-h-screen flex items-center">
+    <section class="py-4  min-h-screen flex items-center">
         <div class="container">
             <div class="max-w-md mx-auto">
                 <!-- Form Card -->
-                <div class="bg-white rounded-lg shadow-strong p-6 md:p-10">
+                <div class="bg-white rounded-lg shadow-strong p-6">
                     <!-- Icon & Title -->
                     <div class="text-center mb-8">
-                        <div class="w-20 h-20 bg-green rounded-lg flex-center mx-auto mb-4">
+                        <div
+                            class="w-20 h-20 bg-gradient-to-r from-yellow-600 to-yellow-200 rounded-lg flex-center mx-auto mb-4">
                             <i class="fas fa-sign-in-alt text-white text-3xl"></i>
                         </div>
-                        <h1 class="text-2xl md:text-3xl font-bold text-black mb-2">تسجيل الدخول</h1>
+                        <h1 class="text-2xl  font-bold text-black mb-2">تسجيل الدخول</h1>
                         <p class="text-sm md:text-base text-gray-600">مرحباً بعودتك! قم بتسجيل الدخول لحسابك</p>
                     </div>
 
@@ -23,7 +24,7 @@
                         <!-- Email -->
                         <div>
                             <label for="email" class="form-label">
-                                <i class="fas fa-envelope text-green ml-2"></i>
+                                <i class="fas fa-envelope text-[#e2d392] ml-2"></i>
                                 البريد الإلكتروني
                             </label>
                             <input type="email" id="email" name="email" class="form-input" placeholder=" البريد الإلكتروني"
@@ -34,7 +35,7 @@
                         <!-- Password -->
                         <div>
                             <label for="password" class="form-label">
-                                <i class="fas fa-lock text-green ml-2"></i>
+                                <i class="fas fa-lock text-[#e2d392] ml-2"></i>
                                 كلمة المرور
                             </label>
                             <div class="relative">
@@ -60,7 +61,8 @@
                         </div>
 
                         <!-- Submit Button -->
-                        <button type="submit" class="btn prevent-double btn-green w-full text-base py-3">
+                        <button type="submit"
+                            class="btn prevent-double bg-gradient-to-r from-yellow-600 to-yellow-200 w-full text-base py-3">
                             <i class="fas fa-sign-in-alt ml-2"></i>
                             تسجيل الدخول
                         </button>

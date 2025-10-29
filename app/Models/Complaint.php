@@ -15,6 +15,8 @@ class Complaint extends Model
         'collector_ids',
         'client_name',
         'client_national_id',
+        'phone_number1',
+        'phone_number2',
         'commercial_name',
         'commercial_record_number',
         'contract_number',
