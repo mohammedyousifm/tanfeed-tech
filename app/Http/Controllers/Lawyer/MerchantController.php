@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\Complaint;
+use App\Mail\SendContractToUser;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
 use Exception;
 
@@ -84,5 +86,33 @@ class MerchantController extends Controller
 
         // ✅ Return the view with clean, well-named variables
         return view('dashboard.lawyer.merchant.show', compact('merchant', 'user', 'complaints'));
+    }
+
+    public function sendContract($id)
+    {
+        $user = User::findOrFail($id);
+
+        // Create unique upload link (you can use route or signed URL)
+        $uploadLink = route('contract.upload', ['user' => $user->id, 'token' => sha1($user->email . time())]);
+
+        // Send email with attachments
+        Mail::to($user->email)->send(new SendContractToUser($user, $uploadLink));
+
+        return back()->with('success', 'تم إرسال العقد للتاجر بنجاح ✅');
+    }
+
+
+    public function destroy($id)
+    {
+        $merchant = User::findOrFail($id);
+
+        // If you need to handle related data, you can do:
+        // $merchant->complaints()->delete();
+
+        $merchant->delete();
+
+        return redirect()
+            ->back()
+            ->with('success', 'تم حذف التاجر بنجاح.');
     }
 }

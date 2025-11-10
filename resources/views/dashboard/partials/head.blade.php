@@ -3,7 +3,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>@yield('title', 'eee')</title>
+    <title>@yield('title', 'تنفيذ تك')</title>
+
+    <link rel="shortcut icon" href="{{ asset('logo/hlol-logo.ico') }}" type="image/x-icon">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -12,15 +14,16 @@
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
+    {{-- Main style --}}
+    <link rel="stylesheet" href="{{ asset('main/main.css') }}">
+
     <link rel="stylesheet" href="{{ asset('landing/style.css') }}">
 
     <link rel="stylesheet" href="{{ asset('dashboard/style.css') }}">
 
-    <style>
-        .border-green {
-            border: 2px solid var(--color-green);
-        }
+    <link rel="stylesheet" href="{{ asset('dashboard/merchant/style.css') }}">
 
+    <style>
         .rounded-sm {
             border-radius: var(--radius-sm);
         }
@@ -57,7 +60,7 @@
             transition: var(--transition);
             position: relative;
             overflow: hidden;
-            font-size: 14px;
+            font-size: 13px;
         }
 
         .nav-link:hover {
@@ -66,7 +69,7 @@
         }
 
         .nav-link.active {
-            background-color: var(--color-green);
+            background-color: #1B7A75;
             color: var(--color-white) !important;
         }
 

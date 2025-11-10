@@ -3,307 +3,415 @@
 
 @section('Content')
 
-    <!-- Sidebar Overlay for Mobile -->
-    <div id="sidebarOverlay" class="sidebar-overlay fixed inset-0 bg-black bg-opacity-50 lg:hidden z-40"></div>
 
-    <!-- Sidebar -->
-    @include('dashboard.partials.sidebar')
+    <div class="max-w-7xl mx-auto space-y-8">
 
-    <!-- Main Content Area -->
-    <div id="mainContent" class="main-content lg:mr-64 transition-all duration-300">
-        <!-- Header -->
-        @include('dashboard.partials.header')
+        <!-- 🧾 Merchant Info Card -->
+        <div class="bg-white rounded-2xl shadow border border-gray-100 p-4 mb-8">
+            <h2 class="text-1xl font-bold text-[#1B7A75] mb-4 border-b-2 border-[#1B7A75]/10 pb-2">
+                🧾 معلومات التاجر
+            </h2>
 
-        <!-- Main Content -->
-        <main class="p-6 lg:p-10 bg-gray-50 min-h-screen">
-            <div class="max-w-7xl mx-auto space-y-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-sm text-gray-700 leading-6">
+                <div><strong>رقم التاجر:</strong> <span class="text-gray-900">#{{ $merchant->client_number }}</span></div>
+                <div><strong>اسم التاجر:</strong> <span class="text-gray-900">{{ $merchant->name }}</span></div>
+                <div><strong>المدينة: </strong> <span class="text-gray-900">{{ $merchant->companyinfo->city }}</span></div>
+                <div><strong>البريد الإلكتروني:</strong> <span class="text-gray-900">{{ $merchant->email }}</span></div>
 
-                <!-- 🧾 Merchant Info Card -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                    <h2 class="text-2xl font-bold text-gray-800 mb-4">معلومات التاجر</h2>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-sm">
-                        <div><strong>رقم التاجر:</strong> #{{ $merchant->client_number }}</div>
-                        <div><strong>اسم التاجر:</strong> {{ $merchant->name }}</div>
-                        <div><strong>البريد الإلكتروني:</strong> {{ $merchant->email }}</div>
-
-                        <div><strong>الحالة:</strong>
-                            <span class="px-2 py-1 rounded-full text-xs font-semibold
-                                                                        @if($merchant->status == 'active') bg-green-100 text-green-700
-                                                                        @elseif($merchant->status == 'pending') bg-yellow-100 text-yellow-700
-                                                                        @elseif($merchant->status == 'suspended') bg-blue-100 text-blue-700
-                                                                        @else bg-gray-100 text-gray-700 @endif">
-                                {{ $merchant->status_label }}
-                            </span>
-                        </div>
-
-                        <div><strong>تاريخ التسجيل:</strong>
-                            {{ \Carbon\Carbon::parse($merchant->created_at)->format('Y-m-d') }}</div>
-                        <div><strong>آخر تسجيل دخول:</strong>
-                            {{ $merchant->last_login_at ? \Carbon\Carbon::parse($merchant->last_login_at)->format('Y-m-d H:i') : 'لم يسجل دخول' }}
-                        </div>
-                    </div>
+                <div>
+                    <strong>الحالة:</strong>
+                    <span
+                        class="px-3 py-1 rounded-full text-xs font-semibold shadow-sm
+                                                                                                                                                                                                                                                @if($merchant->status == 'active') bg-green-100 text-green-700
+                                                                                                                                                                                                                                                @elseif($merchant->status == 'pending') bg-yellow-100 text-yellow-700
+                                                                                                                                                                                                                                                @elseif($merchant->status == 'suspended') bg-blue-100 text-blue-700
+                                                                                                                                                                                                                                                @else bg-gray-100 text-gray-700 @endif">
+                        {{ $merchant->status_label }}
+                    </span>
                 </div>
 
-                <!-- 🏢 Company Info -->
-                @if($merchant->companyinfo)
-                    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                        <h2 class="text-xl font-bold text-gray-800 mb-4">معلومات المنشأة</h2>
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-sm">
-                            <div><strong>اسم المنشأة:</strong> {{ $merchant->companyinfo->company_name ?? '—' }}</div>
-                            <div><strong>رقم المنشأة:</strong> {{ $merchant->companyinfo->establishment_number ?? '—' }}</div>
-                            <div><strong>المدينة:</strong> {{ $merchant->companyinfo->city ?? '—' }}</div>
-                            <div><strong>الحي:</strong> {{ $merchant->companyinfo->district ?? '—' }}</div>
-                            <div><strong>اسم المدير:</strong> {{ $merchant->companyinfo->manager_name ?? '—' }}</div>
-                            <div><strong>الهاتف 1:</strong> {{ $merchant->companyinfo->phone_1 ?? '—' }}</div>
-                            <div><strong>الهاتف 2:</strong> {{ $merchant->companyinfo->phone_2 ?? '—' }}</div>
-                            <div><strong>البريد الإلكتروني:</strong> {{ $merchant->companyinfo->company_email ?? '—' }}</div>
+                <div>
+                    <strong>تاريخ التسجيل:</strong>
+                    <span class="text-gray-900">{{ \Carbon\Carbon::parse($merchant->created_at)->format('Y-m-d') }}</span>
+                </div>
+                <div>
+                    <strong>آخر تسجيل دخول:</strong>
+                    <span class="text-gray-900">
+                        {{ $merchant->last_login_at ? \Carbon\Carbon::parse($merchant->last_login_at)->format('Y-m-d H:i') : 'لم يسجل دخول' }}
+                    </span>
+                </div>
+            </div>
+        </div>
 
-                            @if($merchant->companyinfo->commercial_record_pdf)
+
+
+        <!-- 🏢 Company Info Card -->
+        @if($merchant->companyinfo)
+            <div class="bg-white rounded-2xl shadow border border-gray-100 p-4">
+                <h2 class="text-1xl font-bold text-[#1B7A75] mb-4 border-b-2 border-[#1B7A75]/10 pb-2">
+                    🏢 معلومات المنشأة
+                </h2>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-sm text-gray-700 leading-6">
+                    <div><strong>اسم المنشأة:</strong> <span
+                            class="text-gray-900">{{ $merchant->companyinfo->company_name ?? 'لا يوجد' }}</span></div>
+                    <div><strong>رقم المنشأة:</strong> <span
+                            class="text-gray-900">{{ $merchant->companyinfo->establishment_number ?? 'لا يوجد' }}</span></div>
+                    <div><strong>الحي:</strong> <span
+                            class="text-gray-900">{{ $merchant->companyinfo->district ?? 'لا يوجد' }}</span>
+                    </div>
+                    <div><strong>اسم المدير:</strong> <span
+                            class="text-gray-900">{{ $merchant->companyinfo->manager_name ?? 'لا يوجد' }}</span></div>
+                    <div><strong>الهاتف 1:</strong> <span
+                            class="text-gray-900">{{ $merchant->companyinfo->phone_1 ?? 'لا يوجد' }}</span></div>
+                    <div><strong>الهاتف 2:</strong> <span
+                            class="text-gray-900">{{ $merchant->companyinfo->phone_2 ?? 'لا يوجد' }}</span></div>
+                    <div><strong>البريد الإلكتروني:</strong> <span
+                            class="text-gray-900">{{ $merchant->companyinfo->company_email ?? 'لا يوجد' }}</span></div>
+
+                    @if($merchant->companyinfo->commercial_record_pdf)
+                        <div>
+                            <strong>السجل التجاري:</strong>
+                            <a href="{{ asset('storage/' . $merchant->companyinfo->commercial_record_pdf) }}" target="_blank"
+                                class="inline-flex items-center gap-1 text-[#1B7A75] hover:text-[#16615C] underline transition duration-150">
+                                📄 عرض السجل
+                            </a>
+                        </div>
+                    @endif
+                    @if($merchant->companyinfo->owner_id_pdf)
+                        <div>
+                            <strong>هوية المالك:</strong>
+                            <a href="{{ asset('storage/' . $merchant->companyinfo->owner_id_pdf) }}" target="_blank"
+                                class="inline-flex items-center gap-1 text-[#1B7A75] hover:text-[#16615C] underline transition duration-150">
+                                📄 عرض السجل
+                            </a>
+                        </div>
+                    @endif
+                </div>
+            </div>
+        @endif
+
+        <!-- contract -->
+        @if($merchant->contracts && $merchant->contracts->count() > 0)
+            <div class="bg-white rounded-2xl shadow border border-gray-100 p-5 mb-8">
+                <h2 class="text-xl font-bold text-[#1B7A75] mb-4 border-b-2 border-[#1B7A75]/10 pb-2 flex items-center gap-2">
+                    🧾 عقود التاجر
+                </h2>
+
+                <div class="space-y-3">
+                    @foreach($merchant->contracts as $contract)
+                        <div
+                            class="flex items-center justify-between border border-gray-100 rounded-lg p-3 hover:shadow-sm transition">
+                            <div class="flex items-center gap-3">
+                                {{-- Icon by file type --}}
+                                @if($contract->file_type === 'Contract')
+                                    <span class="text-yellow-600 text-xl">📄</span>
+                                @elseif($contract->file_type === 'Agency Form')
+                                    <span class="text-blue-600 text-xl">🏢</span>
+                                @else
+                                    <span class="text-gray-400 text-xl">📁</span>
+                                @endif
+
+                                {{-- File info --}}
                                 <div>
-                                    <strong>السجل التجاري:</strong>
-                                    <a href="{{ asset('storage/' . $merchant->companyinfo->commercial_record_pdf) }}"
-                                        target="_blank" class="text-blue-600 hover:underline">📄 عرض</a>
+                                    <p class="text-sm font-semibold text-gray-700">
+                                        {{ $contract->file_type === 'Contract' ? 'عقد التاجر' : 'نموذج الوكالة' }}
+                                    </p>
+                                    <p class="text-xs text-gray-500">
+                                        تم الرفع بتاريخ {{ $contract->created_at->format('Y/m/d - H:i') }}
+                                    </p>
                                 </div>
-                            @endif
+                            </div>
+
+                            {{-- View / Download --}}
+                            <a href="{{ asset('storage/' . $contract->contract_file) }}" target="_blank"
+                                class="inline-flex items-center gap-1 text-[#1B7A75] hover:text-[#16615C] font-medium text-sm underline transition">
+                                📥 عرض الملف
+                            </a>
                         </div>
-                    </div>
-                @endif
+                    @endforeach
+                </div>
+            </div>
+        @else
+            {{-- send contract --}}
+            <div class="bg-white rounded-2xl shadow border border-gray-100 p-4 mb-8">
+                <h2 class="text-1xl font-bold text-[#1B7A75] mb-4 border-b-2 border-[#1B7A75]/10 pb-2">
+                    إرسال العقد للتاجر
+                </h2>
+                <form action="{{ route('lawyer.merchant.sendContract', $merchant->id) }}" method="POST">
+                    @csrf
+                    <button type="submit" class="px-4 py-2 bg-[#1B7A75] text-white f-13 rounded hover:bg-yellow-700">
+                        إرسال العقد
+                    </button>
+                </form>
+            </div>
+        @endif
 
-                <!-- 🔍 Filter + Complaints Table -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                    <div class="flex flex-col md:flex-row justify-between items-center mb-4 gap-4">
+        <!-- 🔍 Filter + Complaints Table -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+            <div class="flex flex-col md:flex-row justify-between items-center mb-4 gap-4">
 
-                        <!-- Filter/Search -->
-                        <div class="relative w-full md:w-1/3">
-                            <input type="text" id="tableSearch" placeholder="ابحث في الطلبات..."
-                                class="w-full border-gray-300 rounded-lg pl-10 pr-3 py-2 text-sm focus:ring-green-500 focus:border-green-500">
-                            <i class="fas fa-search absolute left-3 top-2.5 text-gray-400"></i>
-                        </div>
+                <!-- Filter/Search -->
+                <div class="relative w-full md:w-1/3">
+                    <input type="text" id="tableSearch" placeholder="ابحث في الطلبات..."
+                        class="w-full border-gray-300 rounded-lg pl-10 pr-3 py-2 text-sm focus:ring-green-500 focus:border-green-500">
+                    <i class="fas fa-search absolute left-3 top-2.5 text-gray-400"></i>
+                </div>
 
-                        <h2 class="text-xl font-bold text-gray-800">طلبات التاجر</h2>
+                <h2 class="f-12 font-bold text-gray-800">طلبات التاجر</h2>
 
 
-                    </div>
+            </div>
 
-                    <div class="overflow-x-auto">
-                        <table class="min-w-full border border-gray-100 text-sm">
-                            <thead class="bg-gray-100 text-gray-700 text-xs uppercase font-semibold">
-                                <tr>
-                                    <th class="px-3 py-2">#</th>
-                                    <th class="px-3 py-2">رقم الطلب</th>
-                                    <th class="px-3 py-2">اسم العميل</th>
-                                    <th class="px-3 py-2">رقم العقد</th>
-                                    <th class="px-3 py-2">المبلغ المطلوب</th>
-                                    <th class="px-3 py-2">المبلغ المدفوع</th>
-                                    <th class="px-3 py-2">المتابعات</th>
-                                    <th class="px-3 py-2">التحصيلات</th>
-                                    <th class="px-3 py-2">المحصلين</th>
-                                    <th class="px-3 py-2">الحالة</th>
-                                    <th class="px-3 py-2 text-center">الإجراءات</th>
+            <!-- Table Container -->
+            <div class="table-container">
+                <div class="overflow-x-auto">
+                    <table class="data-table text-center">
+                        <thead>
+                            <tr>
+                                <th class="f-11">رقم الطلب</th>
+                                <th class="f-11">اسم التاجر</th>
+                                <th class="f-11">اسم العميل</th>
+                                <th class="f-11">رقم العقد</th>
+                                <th class="f-11">المبلغ المتبقي</th>
+                                <th class="f-11">حالة الهاتف</th>
+                                <th class="f-11">تاريخ الطلب</th>
+                                <th class="f-11">المحصل</th>
+                                <th class="f-11">الحالة</th>
+                                <th class="f-11">المتابعات</th>
+                                <th class="f-11">التحصيلات</th>
+                                <th class="f-11">الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                            @forelse ($complaints as $complaint)
+                                <tr onclick="window.location='{{ route('lawyer.complaints.show', $complaint->id) }}'"
+                                    class="cursor-pointer hover:bg-gray-50 transition">
+
+                                    <!-- Serial -->
+                                    <td class="px-3 f-11 py-2 font-semibold text-gray-800">
+                                        {{ $complaint->serial_number }}#
+                                    </td>
+
+                                    <!-- User -->
+                                    <td class="px-3 f-11 py-2 text-gray-600">{{ $complaint->user->name }}
+                                    </td>
+
+                                    <!-- Client -->
+                                    <td class="px-3 f-11 py-2 font-semibold text-gray-700">
+                                        {{ $complaint->client_name }}
+                                    </td>
+
+                                    <!-- Contract -->
+                                    <td class="px-3 f-11 py-2">{{ $complaint->contract_number }}</td>
+
+                                    <th class="px-3 f-11 py-2">{{ number_format($complaint->amount_remaining, 0) }} ر.س</th>
+
+                                    <!-- phone status -->
+                                    <td class="px-2 py-2 text-center">
+                                        <button
+                                            onclick="event.stopPropagation(); openPhonestatusModal({{ $complaint->id }}, '{{ $complaint->phone_status }}')"
+                                            class="px-2 py-1 f-11 rounded-full  font-semibold transition hover:opacity-80
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              @if($complaint->phone_status == 'available') bg-green-100 text-green-700
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            @elseif($complaint->phone_status == 'not_available') bg-red-100 text-red-700
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            @else bg-gray-100 text-gray-700 @endif">
+                                            {{ $complaint->phone_status_label }}
+                                        </button>
+                                    </td>
+
+                                    <!-- created at  -->
+                                    <td class="px-3 py-2 f-11 font-semibold text-yellow-600">
+                                        {{ \Carbon\Carbon::parse($complaint->created_at)->format('Y-m-d')  }}
+                                    </td>
+
+                                    <!-- Collectors -->
+                                    <td class="px-3 py-2">
+                                        @php
+                                            // Get collector object by single collector_id
+                                            $collector = \App\Models\User::find($complaint->collector_id);
+                                        @endphp
+
+                                        @if (!$collector)
+                                            <button onclick="event.stopPropagation(); openCollectorModal({{ $complaint->id }})"
+                                                class="hover:underline f-11 text-sm font-medium">
+                                                اختر المحصل
+                                            </button>
+                                        @else
+                                            <span onclick="event.stopPropagation(); openCollectorModal({{ $complaint->id }})"
+                                                class="cursor-pointer f-11 px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs hover:bg-green-200 transition">
+                                                {{ $collector->name }}
+                                            </span>
+                                        @endif
+                                    </td>
+
+
+                                    <!-- Status -->
+                                    <td class="px-2 py-2 text-center">
+                                        <button
+                                            onclick="event.stopPropagation(); openStatusModal({{ $complaint->id }}, '{{ $complaint->status }}')"
+                                            class="px-2 py-1 f-11 rounded-full  font-semibold transition hover:opacity-80
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        @if($complaint->status == 'pending') bg-yellow-100 text-yellow-700
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        @elseif($complaint->status == 'in_progress') bg-blue-100 text-blue-700
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        @elseif($complaint->status == 'completed') bg-green-100 text-green-700
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        @elseif($complaint->status == 'cancelled') bg-red-100 text-red-700
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        @else bg-gray-100 text-gray-700 @endif">
+                                            {{ $complaint->status_label }}
+                                        </button>
+                                    </td>
+
+                                    <!-- Followups -->
+                                    <td class="px-3 py-2 text-center">
+                                        <a href="{{ route('lawyer.complaints.followup', $complaint->id) }}"
+                                            onclick="event.stopPropagation()" class="f-11 hover:underline text-sm">
+                                            المتابعات
+                                        </a>
+                                    </td>
+
+                                    <!-- Collections -->
+                                    <td class="px-3 py-2 text-center">
+                                        <a href="{{ route('lawyer.complaints.collections', $complaint->id) }}"
+                                            onclick="event.stopPropagation()" class="f-11 hover:underline text-sm">
+                                            التحصيلات
+                                        </a>
+                                    </td>
+
+
+                                    <!-- Actions -->
+                                    <td class="px-3 py-2 text-center">
+                                        <div class="flex justify-center gap-2">
+
+                                            <form action="{{ route('lawyer.complaints.destroy', $complaint->id) }}"
+                                                method="POST"
+                                                onsubmit="return confirm('هل أنت متأكد أنك تريد حذف هذا الطلب؟');">
+                                                @csrf
+                                                @method('DELETE')
+
+                                                <button type="submit" onclick="event.stopPropagation()"
+                                                    class="text-red-600 hover:text-red-800" title="حذف">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </form>
+
+                                        </div>
+                                    </td>
+
                                 </tr>
-                            </thead>
+                            @empty
+                                <tr>
+                                    <td colspan="9" class="py-6 text-center text-gray-500">لا توجد طلبات.</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
 
-                            <tbody id="tableBody">
-                                @forelse ($complaints as $complaint)
-                                    <tr onclick="window.location='{{ route('lawyer.complaints.show', $complaint->id) }}'"
-                                        class="cursor-pointer hover:bg-gray-50 transition">
-
-                                        <td class="px-3 py-2 text-center">{{ $loop->iteration }}</td>
-                                        <td class="px-3 py-2 font-semibold">#{{ $complaint->serial_number }}</td>
-                                        <td class="px-3 py-2">{{ $complaint->client_name }}</td>
-                                        <td class="px-3 py-2">{{ $complaint->contract_number }}</td>
-                                        <td class="px-3 py-2 text-green-600 font-semibold">
-                                            {{ number_format($complaint->amount_requested, 0) }} ر.س
-                                        </td>
-                                        <td class="px-3 py-2 text-yellow-600 font-semibold">
-                                            {{ number_format($complaint->amount_paid, 0) }} ر.س
-                                        </td>
-
-                                        <!-- Followups -->
-                                        <td class="px-3 py-2 text-center">
-                                            <a href="{{ route('lawyer.complaints.followup', $complaint->id) }}"
-                                                onclick="event.stopPropagation()" class=" hover:underline text-sm">
-                                                المتابعات
-                                            </a>
-                                        </td>
-
-                                        <!-- Collections -->
-                                        <td class="px-3 py-2 text-center">
-                                            <a href="{{ route('lawyer.complaints.collections', $complaint->id) }}"
-                                                onclick="event.stopPropagation()" class=" hover:underline text-sm">
-                                                التحصيلات
-                                            </a>
-                                        </td>
-
-                                        <!-- Collectors -->
-                                        <td class="px-3 py-2">
-                                            @php
-                                                $collectorIds = is_array($complaint->collector_ids)
-                                                    ? $complaint->collector_ids
-                                                    : json_decode($complaint->collector_ids, true);
-                                                $collectors = \App\Models\User::whereIn('id', $collectorIds ?? [])->get();
-                                            @endphp
-
-                                            @if ($collectors->isEmpty())
-                                                <button onclick="event.stopPropagation(); openCollectorModal({{ $complaint->id }})"
-                                                    class="text-blue-600 hover:underline text-sm">اختر المحصلين</button>
-                                            @else
-                                                <div class="flex flex-wrap gap-1">
-                                                    @foreach ($collectors as $collector)
-                                                        <span
-                                                            onclick="event.stopPropagation(); openCollectorModal({{ $complaint->id }})"
-                                                            class="cursor-pointer px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs hover:bg-green-200 transition">
-                                                            {{ $collector->name }}
-                                                        </span>
-                                                    @endforeach
-                                                </div>
-                                            @endif
-                                        </td>
-
-                                        <!-- Status -->
-                                        <td class="px-3 py-2 text-center">
-                                            <button
-                                                onclick="event.stopPropagation(); openStatusModal({{ $complaint->id }}, '{{ $complaint->status }}')"
-                                                class="px-3 py-1 rounded-full text-xs font-semibold transition hover:opacity-80
-                                                                                                                                    @if($complaint->status == 'pending') bg-yellow-100 text-yellow-700
-                                                                                                                                    @elseif($complaint->status == 'in_progress') bg-blue-100 text-blue-700
-                                                                                                                                    @elseif($complaint->status == 'completed') bg-green-100 text-green-700
-                                                                                                                                    @elseif($complaint->status == 'cancelled') bg-red-100 text-red-700
-                                                                                                                                    @else bg-gray-100 text-gray-700 @endif">
-                                                {{ $complaint->status_label }}
-                                            </button>
-                                        </td>
-
-                                        <!-- Actions -->
-                                        <td class="px-3 py-2 text-center">
-                                            <button onclick="event.stopPropagation(); confirmDelete({{ $complaint->id }})"
-                                                class="text-red-600 hover:text-red-800" title="حذف">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="9" class="py-6 text-center text-gray-500">لا توجد طلبات لهذا التاجر.</td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                    </div>
+                    </table>
                 </div>
-            </div>
 
-            <!-- Modal لتغيير حالة الشكوى -->
-            <div id="statusModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
-                <div class="bg-white rounded-lg shadow-strong w-full max-w-md mx-4 p-6 relative">
-                    <h3 class="text-xl font-bold text-green mb-4">تغيير حالة الشكوى</h3>
-                    <form id="statusForm" method="POST" action="">
-                        @csrf
-                        @method('PATCH')
 
-                        <input type="hidden" name="complaint_id" id="complaintId">
 
-                        <div class="mb-4">
-                            <label class="block mb-1 text-gray-700 font-semibold">اختر الحالة الجديدة</label>
-                            <select name="status" id="statusSelect"
-                                class="w-full border-gray-300 rounded-md shadow-sm focus:ring-green focus:border-green">
-                                <option value="accepted">قبول</option>
-                                <option value="suspended">تعليق</option>
-                                <option value="pending">قيد المراجعة</option>
-                                <option value="in_progress">قيد التنفيذ</option>
-                                <option value="completed">مكتمل</option>
-                                <option value="cancelled">ملغي</option>
-                            </select>
-                        </div>
 
-                        <div class="flex justify-end gap-3">
-                            <button type="button" onclick="closeStatusModal()"
-                                class="btn btn-yellow hover-up">إلغاء</button>
-                            <button type="submit" class="btn btn-green hover-up">حفظ</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
+                {{-- Modals --}}
+                @include('dashboard.lawyer.models.phone-status')
+                @include('dashboard.lawyer.models.complaints-status')
+                @include('dashboard.lawyer.models.select-collector')
+                <script>
+                    // 🟢 فتح نافذة تغيير الحالة
+                    function openStatusModal(id, currentStatus) {
+                        const modal = document.getElementById('statusModal');
+                        const statusSelect = document.getElementById('statusSelect');
+                        const suspendedContainer = document.getElementById('suspendedReasonContainer');
+                        const suspendedInput = document.getElementById('suspended_reason');
+                        const complaintIdInput = document.getElementById('complaintId');
+                        const form = document.getElementById('statusForm');
+                        const currentStatusContainer = document.getElementById('currentStatusContainer');
+                        const currentStatusLabel = document.getElementById('currentStatusLabel');
 
-            <!-- Modal لاختيار المحصلين -->
-            <div id="collectorModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
-                <div class="bg-white rounded-lg shadow-lg w-full max-w-md mx-4 p-6 relative">
-                    <h3 class="text-xl font-bold text-green mb-4">تعيين المحصلين</h3>
-                    <form id="collectorForm" method="POST" action="">
-                        @csrf
-                        @method('PATCH')
+                        // إعداد البيانات
+                        complaintIdInput.value = id;
+                        form.action = `/lawyer/complaints/${id}/status`;
 
-                        <input type="hidden" name="complaint_id" id="collectorComplaintId">
+                        // عرض الحالة الحالية
+                        currentStatusContainer.classList.remove('hidden');
+                        currentStatusLabel.textContent = getArabicStatus(currentStatus);
 
-                        <div class="mb-4">
-                            <label class="block mb-2 font-semibold text-gray-700">اختر المحصلين</label>
-                            <select name="collector_ids[]" id="collectorSelect" multiple
-                                class="w-full border-gray-300 rounded-md shadow-sm focus:ring-green focus:border-green">
-                                @foreach (\App\Models\User::where('role', 'collector')->get() as $user)
-                                    <option value="{{ $user->id }}">{{ $user->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
+                        // 🔥 إظهار جميع الخيارات أولاً (في حال تم إخفاؤها من قبل)
+                        Array.from(statusSelect.options).forEach(opt => opt.classList.remove('hidden'));
 
-                        <div class="flex justify-end gap-3">
-                            <button type="button" onclick="closeCollectorModal()"
-                                class="btn btn-yellow hover-up">إلغاء</button>
-                            <button type="submit" class="btn btn-green hover-up">حفظ</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
+                        // 🔥 إخفاء الحالة الحالية فقط
+                        const currentOption = Array.from(statusSelect.options).find(opt => opt.value === currentStatus);
+                        if (currentOption) currentOption.classList.add('hidden');
 
-            <script>
-                // فتح النافذة
-                function openStatusModal(id, currentStatus) {
-                    document.getElementById('statusModal').classList.remove('hidden');
-                    document.getElementById('statusModal').classList.add('flex');
-                    document.getElementById('complaintId').value = id;
-                    document.getElementById('statusSelect').value = currentStatus;
-                    document.getElementById('statusForm').action = `/lawyer/complaints/{id}/status`;
-                    document.getElementById('statusForm').action = `/lawyer/complaints/${id}/status`;
+                        // 🔥 إعادة الضبط للحالة الافتراضية (أول اختيار متاح)
+                        const firstVisible = Array.from(statusSelect.options).find(opt => !opt.classList.contains('hidden'));
+                        statusSelect.value = firstVisible ? firstVisible.value : '';
 
-                }
+                        // 🎯 ضبط حقل سبب التعليق حسب الحالة
+                        if (statusSelect.value === 'suspended') {
+                            suspendedContainer.classList.remove('hidden');
+                            suspendedInput.required = true;
+                        } else {
+                            suspendedContainer.classList.add('hidden');
+                            suspendedInput.required = false;
+                            suspendedInput.value = '';
+                        }
 
-                // إغلاق النافذة
-                function closeStatusModal() {
-                    document.getElementById('statusModal').classList.add('hidden');
-                    document.getElementById('statusModal').classList.remove('flex');
-                }
-
-                // فتح المودال
-                function openCollectorModal(id) {
-                    document.getElementById('collectorModal').classList.remove('hidden');
-                    document.getElementById('collectorModal').classList.add('flex');
-                    document.getElementById('collectorComplaintId').value = id;
-                    document.getElementById('collectorForm').action = `/lawyer/complaints/${id}/collectors`;
-                }
-
-                // إغلاق المودال
-                function closeCollectorModal() {
-                    document.getElementById('collectorModal').classList.add('hidden');
-                    document.getElementById('collectorModal').classList.remove('flex');
-                }
-            </script>
-
-            <!-- Filter Script -->
-            <script>
-                const searchInput = document.getElementById('tableSearch');
-                const tableBody = document.getElementById('tableBody');
-                searchInput.addEventListener('keyup', function () {
-                    const value = this.value.toLowerCase();
-                    const rows = tableBody.getElementsByTagName('tr');
-                    for (let row of rows) {
-                        const text = row.textContent.toLowerCase();
-                        row.style.display = text.includes(value) ? '' : 'none';
+                        modal.classList.remove('hidden');
+                        modal.classList.add('flex');
                     }
-                });
-            </script>
-        </main>
 
+                    // 🔴 إغلاق النافذة
+                    function closeStatusModal() {
+                        const modal = document.getElementById('statusModal');
+                        modal.classList.add('hidden');
+                        modal.classList.remove('flex');
+                    }
 
+                    // ✅ مراقبة تغيير الحالة بشكل دائم
+                    document.addEventListener('change', function (event) {
+                        if (event.target && event.target.id === 'statusSelect') {
+                            const suspendedContainer = document.getElementById('suspendedReasonContainer');
+                            const suspendedInput = document.getElementById('suspended_reason');
+
+                            if (event.target.value === 'suspended') {
+                                suspendedContainer.classList.remove('hidden');
+                                suspendedInput.required = true;
+                            } else {
+                                suspendedContainer.classList.add('hidden');
+                                suspendedInput.required = false;
+                                suspendedInput.value = '';
+                            }
+                        }
+                    });
+
+                    // 🧭 ترجمة الحالات (عربي للعرض فقط)
+                    function getArabicStatus(status) {
+                        switch (status) {
+                            case 'accepted': return 'قبول';
+                            case 'suspended': return 'تعليق';
+                            case 'pending': return 'قيد المراجعة';
+                            case 'in_progress': return 'قيد التنفيذ';
+                            case 'completed': return 'مكتمل';
+                            case 'cancelled': return 'ملغي';
+                            default: return 'غير معروف';
+                        }
+                    }
+                </script>
+
+            </div>
+        </div>
     </div>
 
+
+    <!-- Filter Script -->
+    <script>
+        const searchInput = document.getElementById('tableSearch');
+        const tableBody = document.getElementById('tableBody');
+        searchInput.addEventListener('keyup', function () {
+            const value = this.value.toLowerCase();
+            const rows = tableBody.getElementsByTagName('tr');
+            for (let row of rows) {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(value) ? '' : 'none';
+            }
+        });
+    </script>
 @endsection

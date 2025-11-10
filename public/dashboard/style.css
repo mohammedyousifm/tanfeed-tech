@@ -43,7 +43,7 @@
 }
 
 .data-table thead {
-    background-color: var(--color-green);
+    background-color: #1b7a75;
     color: var(--color-white);
 }
 

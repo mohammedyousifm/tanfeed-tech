@@ -3,15 +3,16 @@
 
 @include('front.partials.head')
 
-<body>
-
-    @include('front.partials.header')
+<body class="overflow-x-hidden">
 
 
+
+    @include('dashboard.partials.errors')
     @yield('Content')
 
 
     @include('front.partials.footer')
+
 </body>
 
 </html>

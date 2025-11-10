@@ -4,38 +4,147 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Lawyer\DashboardController;
 use App\Http\Controllers\Lawyer\ComplaintController;
+use App\Http\Controllers\Lawyer\PhoneController;
 use App\Http\Controllers\Lawyer\FollowUpController;
 use App\Http\Controllers\Lawyer\CollectionsCollections;
 use App\Http\Controllers\Lawyer\CollectorsController;
 use App\Http\Controllers\Lawyer\MerchantController;
+use App\Http\Controllers\Lawyer\SettingsController;
+use App\Http\Controllers\Lawyer\NotificationController;
+
+use App\Http\Controllers\Lawyer\Complaints\UpdateStatusController;
+use App\Http\Controllers\Lawyer\Complaints\PaymentDatesController;
+/*
+|--------------------------------------------------------------------------
+| Lawyer Routes (Authenticated + Lawyer Role)
+|--------------------------------------------------------------------------
+*/
 
 Route::middleware(['auth', 'lawyer'])->group(function () {
 
-    // dashboard
-    Route::get('/lawyer/dashboard', [DashboardController::class, 'index'])->name('lawyer.dashboard');
+    /*
+    |--------------------------------------------------------------------------
+    | Dashboard
+    |--------------------------------------------------------------------------
+    */
+    Route::get('/lawyer/dashboard', [DashboardController::class, 'index'])
+        ->name('lawyer.dashboard');
 
-    // complaints
-    Route::get('/lawyer/complaints', [ComplaintController::class, 'index'])->name('lawyer.complaints.index');
-    Route::get('/lawyer/complaints/{id}/show', [ComplaintController::class, 'show'])->name('lawyer.complaints.show');
-    Route::patch('/lawyer/complaints/{id}/status', [ComplaintController::class, 'updateStatus'])->name('lawyer.complaints.updateStatus');
-    Route::patch('/lawyer/complaints/{id}/collectors', [ComplaintController::class, 'updateCollectors'])->name('lawyer.complaints.collectors.update');
+    /*
+    |--------------------------------------------------------------------------
+    | Complaints
+    |--------------------------------------------------------------------------
+    */
+    Route::prefix('lawyer/complaints')->name('lawyer.complaints.')->group(function () {
+        Route::get('/', [ComplaintController::class, 'index'])->name('index');
+        Route::get('/{id}/show', [ComplaintController::class, 'show'])->name('show');
+        Route::delete('/{complaint}', [ComplaintController::class, 'destroy'])->name('destroy');
 
-    // Collectors
-    Route::get('/lawyer/collectors', [CollectorsController::class, 'index'])->name('lawyer.collectors.index');
-    Route::post('/lawyer/collectors', [CollectorsController::class, 'store'])->name('lawyer.collectors.store');
-    Route::patch('/lawyer/collectors/{id}/status', [CollectorsController::class, 'updateStatus'])->name('lawyer.collectors.updateStatus');
+        // Complaint actions
+        Route::patch('/{id}/status', [UpdateStatusController::class, 'updateStatus'])->name('updateStatus');
+        Route::patch('/{id}/collectors', [ComplaintController::class, 'updateCollectors'])->name('collectors.update');
 
-    // merchant
-    Route::get('/lawyer/merchant', [MerchantController::class, 'index'])->name('lawyer.merchant.index');
-    Route::patch('/lawyer/merchant/{id}/status', [MerchantController::class, 'updateStatus'])->name('lawyer.merchant.updateStatus');
-    Route::get('/lawyer/merchant/{id}/show', [MerchantController::class, 'show'])->name('lawyer.merchant.show');
+        // Filtered complaint lists
+        Route::get('/obtainedcontracts', [ComplaintController::class, 'obtainedcontracts'])->name('obtainedcontracts');
+        Route::get('/neglectedcontracts', [ComplaintController::class, 'neglectedcontracts'])->name('neglectedcontracts');
+        Route::get('/cancelled', [ComplaintController::class, 'cancelled'])->name('cancelled');
 
-    // Follow Up
-    Route::get('/lawyer/complaints/{id}/followup', [FollowUpController::class, 'index'])->name('lawyer.complaints.followup');
-    Route::post('/lawyer/follow-ups/store', [FollowUpController::class, 'store'])->name('lawyer.followups.store');
+        // Export
+        Route::get('/export-unavailable', [ComplaintController::class, 'exportUnavailable'])->name('export-unavailable');
 
-    // collections
-    Route::get('/lawyer/complaints/{id}/collections', [CollectionsCollections::class, 'index'])->name('lawyer.complaints.collections');
-    Route::Post('/lawyer/complaints/collections/store', [CollectionsCollections::class, 'store'])->name('lawyer.collections.store');
-    Route::Post('/lawyer/collections/upload-tanfeed', [CollectionsCollections::class, 'uploadTanfeed'])->name('lawyer.collections.uploadTanfeed');
+        // Follow-up
+        Route::get('/{id}/followup', [FollowUpController::class, 'index'])->name('followup');
+
+        // Collections
+        Route::get('/{id}/collections', [CollectionsCollections::class, 'index'])->name('collections');
+    });
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | lawyer payment dates
+    |--------------------------------------------------------------------------
+    */
+    Route::prefix('lawyer/payment')->name('lawyer.payment.')->group(function () {
+        Route::get('/', [PaymentDatesController::class, 'index'])->name('dates');
+    });
+
+    /*
+    |--------------------------------------------------------------------------
+    | Phone Management
+    |--------------------------------------------------------------------------
+    */
+    Route::prefix('lawyer')->name('lawyer.complaints.')->group(function () {
+        Route::patch('/phone-status/{id}/status', [PhoneController::class, 'updateStatus'])->name('updateStatus');
+        Route::put('/phone-number/{complaint}/update-phones', [PhoneController::class, 'updatePhones'])->name('updatePhones');
+    });
+
+    /*
+    |--------------------------------------------------------------------------
+    | Collectors
+    |--------------------------------------------------------------------------
+    */
+    Route::prefix('lawyer/collectors')->name('lawyer.collectors.')->group(function () {
+        Route::get('/', [CollectorsController::class, 'index'])->name('index');
+        Route::post('/', [CollectorsController::class, 'store'])->name('store');
+        Route::delete('/{collector}', [CollectorsController::class, 'destroy'])->name('destroy');
+        Route::patch('/{id}/status', [CollectorsController::class, 'updateStatus'])->name('updateStatus');
+    });
+
+    /*
+    |--------------------------------------------------------------------------
+    | Merchants
+    |--------------------------------------------------------------------------
+    */
+    Route::prefix('lawyer/merchant')->name('lawyer.merchant.')->group(function () {
+        Route::get('/', [MerchantController::class, 'index'])->name('index');
+        Route::patch('/{id}/status', [MerchantController::class, 'updateStatus'])->name('updateStatus');
+        Route::get('/{id}/show', [MerchantController::class, 'show'])->name('show');
+
+        Route::post('/{id}/send-contract', [MerchantController::class, 'sendContract'])->name('sendContract');
+    });
+
+    // Single route outside prefix for destroy (plural path)
+    Route::delete('/lawyer/merchants/{merchant}', [MerchantController::class, 'destroy'])
+        ->name('lawyer.merchants.destroy');
+
+    /*
+    |--------------------------------------------------------------------------
+    | Follow Ups (Create / Update)
+    |--------------------------------------------------------------------------
+    */
+    Route::prefix('lawyer/followups')->name('lawyer.followups.')->group(function () {
+        Route::post('/store', [FollowUpController::class, 'store'])->name('store');
+        Route::post('/update/{id}', [FollowUpController::class, 'update'])->name('update');
+    });
+
+    /*
+    |--------------------------------------------------------------------------
+    | Collections
+    |--------------------------------------------------------------------------
+    */
+    Route::prefix('lawyer/collections')->name('lawyer.collections.')->group(function () {
+        Route::post('/store', [CollectionsCollections::class, 'store'])->name('store');
+        Route::post('/upload-tanfeed', [CollectionsCollections::class, 'uploadTanfeed'])->name('uploadTanfeed');
+    });
+
+    /*
+    |--------------------------------------------------------------------------
+    | Settings
+    |--------------------------------------------------------------------------
+    */
+    Route::get('/lawyer/settings', [SettingsController::class, 'index'])
+        ->name('lawyer.settings.index');
+
+    /*
+    |--------------------------------------------------------------------------
+    | Notifications
+    |--------------------------------------------------------------------------
+    */
+    Route::prefix('lawyer')->group(function () {
+        Route::get('/notifications', [NotificationController::class, 'index'])
+            ->name('lawyer.settings.notifications');
+        Route::post('/notifications/mark-all-read', [NotificationController::class, 'markAllRead'])
+            ->name('notifications.markAllRead');
+    });
 });

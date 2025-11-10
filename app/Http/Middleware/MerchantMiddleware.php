@@ -16,10 +16,23 @@ class MerchantMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        if (Auth::check() && Auth::user()->role === 'merchant') {
-            return $next($request);
+        if (!Auth::check()) {
+            abort(403, 'غير مصرح لك بالدخول');
         }
 
-        abort(403, 'غير مصرح لك بالدخول (للتجار فقط)');
+        $user = Auth::user();
+
+        // 🚫 لو المستخدم ليس تاجرًا
+        if ($user->role !== 'merchant') {
+            abort(403, 'غير مصرح لك بالدخول');
+        }
+
+        // ⚠️ لو المستخدم تاجر لكن حسابه غير نشط
+        if ($user->status !== 'active') {
+            return redirect()->route('not-active');
+        }
+
+        // ✅ تاجر نشط
+        return $next($request);
     }
 }

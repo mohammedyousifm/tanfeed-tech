@@ -2,11 +2,12 @@
 
 namespace App\Notifications;
 
-use Illuminate\Auth\Notifications\VerifyEmail;
+use Illuminate\Auth\Notifications\VerifyEmail as VerifyEmailNotification;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\URL;
 
-class CustomVerifyEmail extends VerifyEmail
+class CustomVerifyEmail extends VerifyEmailNotification
 {
     /**
      * Build the mail representation of the notification.
@@ -16,10 +17,22 @@ class CustomVerifyEmail extends VerifyEmail
         $verificationUrl = $this->verificationUrl($notifiable);
 
         return (new MailMessage)
-            ->view('emails.verify-email', [
+            ->subject('تأكيد البريد الإلكتروني الخاص بك')
+            ->markdown('emails.verify', [
+                'url' => $verificationUrl,
                 'user' => $notifiable,
-                'verificationUrl' => $verificationUrl,
-            ])
-            ->subject('تأكيد البريد الإلكتروني - تنفيذ تك');
+            ]);
+    }
+
+    /**
+     * Generate the verification URL.
+     */
+    protected function verificationUrl($notifiable)
+    {
+        return URL::temporarySignedRoute(
+            'verification.verify',
+            Carbon::now()->addMinutes(60),
+            ['id' => $notifiable->getKey(), 'hash' => sha1($notifiable->getEmailForVerification())]
+        );
     }
 }

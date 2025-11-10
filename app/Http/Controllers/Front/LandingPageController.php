@@ -11,4 +11,9 @@ class LandingPageController extends Controller
     {
         return view('front.landing');
     }
+
+    public function  license()
+    {
+        return view('front.license');
+    }
 }

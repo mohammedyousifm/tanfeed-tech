@@ -137,7 +137,6 @@
 
 
 
-
 $(document).ready(function () {
 
   let isNavigating = false;

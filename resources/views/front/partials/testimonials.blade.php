@@ -21,61 +21,85 @@
         transform: scale(1.1);
         background-color: rgba(59, 130, 246, 0.1);
     }
+
+    .arrow-btn:active {
+        transform: scale(0.95);
+    }
+
+    #testimonials {
+        position: relative;
+        background-image: url('{{ asset('landing/images/saudi arabia legal office video.jpg') }}');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+
+    #testimonials::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        /* adjust opacity here */
+        z-index: 0;
+    }
+
+    .testimonials-body {
+        z-index: 1000;
+    }
 </style>
 
-<section class="py-16 px-4 p-4"
-    style="background-image: url('{{ asset('landing/images/saudi arabia legal office video.jpg') }}');">
-    <div class="max-w-6xl mx-auto">
-        <!-- Title -->
-        <div class="text-center mb-12">
-            <h2 class="text-2xl font-bold text-gray-100 mb-4">
-                آراء العملاء
-            </h2>
-            <div class="w-24 h-1 bg-[#e2d392] mx-auto"></div>
-        </div>
 
-        <!-- Testimonial Container -->
-        <div class="relative">
-            <!-- Previous Arrow -->
+<section id="testimonials" class="py-10 px-4">
+    <div class="max-w-6xl testimonials-body mx-auto">
+        <!-- Testimonial Container with proper positioning -->
+        <div class="relative px-4 md:px-10 lg:px-24">
+
+
+            <!-- Previous Arrow (Right side in RTL) -->
             <button id="prevBtn"
-                class="arrow-btn absolute right-0 top-1/2 -translate-y-1/2 z-10 w-12 h-12 md:w-16 md:h-16 flex items-center justify-center rounded-full border-2 border-gray-300 bg-white hover:border-blue-500 transition-all md:-right-20">
-                <svg class="w-6 h-6 md:w-8 md:h-8 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                class="arrow-btn absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 md:w-14 md:h-14 flex items-center justify-center rounded-full border-2  bg-white  shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+                <svg class="w-5 h-5 md:w-7 md:h-7 text-[#CF9411]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                 </svg>
             </button>
 
             <!-- Testimonial Card -->
-            <div class="testimonial-item max-w-4xl mx-auto px-8 md:px-20">
-                <div class="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-8 md:p-12 shadow-lg">
+            <div class="testimonial-item max-w-4xl mx-auto">
+
+
+                <div class="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-6 md:p-10 lg:p-12 shadow-2xl">
+
+                    <div class="text-center mb-12">
+                        <h2 class="text-2xl font-bold text-gray-900 mb-4">
+                            قصص نجاح
+                        </h2>
+                        <div class="w-24 h-1 bg-[#CF9411] mx-auto"></div>
+                    </div>
+
                     <!-- Quote Icon -->
                     <div class="flex justify-center mb-6">
-                        <svg class="w-12 h-12 text-blue-500 opacity-50" fill="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-10 h-10 md:w-12 md:h-12 text-[#CF9411] opacity-50" fill="currentColor"
+                            viewBox="0 0 24 24">
                             <path
                                 d="M9.983 3v7.391c0 5.704-3.731 9.57-8.983 10.609l-.995-2.151c2.432-.917 3.995-3.638 3.995-5.849h-4v-10h9.983zm14.017 0v7.391c0 5.704-3.748 9.571-9 10.609l-.996-2.151c2.433-.917 3.996-3.638 3.996-5.849h-3.983v-10h9.983z" />
                         </svg>
                     </div>
 
                     <!-- Testimonial Text -->
-                    <div class="text-center mb-8">
-                        <p id="testimonialText" class="text-lg md:text-xl text-gray-700 leading-relaxed mb-2">
-                            They are capable of addressing all the detailed technical aspects of the case upon which the
-                            legal issues rest.
-                        </p>
-                    </div>
-
-                    <!-- Client Info -->
-                    <div class="text-center border-t border-gray-300 pt-6">
-                        <p id="clientInfo" class="text-base md:text-lg text-gray-600 font-medium">
-                            Chambers and Partners Global 2025/Int'l Arbitration Client
+                    <div class="text-center mb-4">
+                        <p id="testimonialText"
+                            class="text-base  text-gray-700 leading-relaxed mb-2 min-h-[80px] md:min-h-[100px] flex items-center justify-center">
+                            تم تحصيل مبلغ معدوم من المحامي خالد له عشرين سنة بمبلغ ستة عشر مليون وبعد التواصل مع المحامي
+                            خالد تم تحصيل المبلغ بعد معاناة سنوات طويلة .
                         </p>
                     </div>
                 </div>
             </div>
 
-            <!-- Next Arrow -->
+            <!-- Next Arrow (Left side in RTL) -->
             <button id="nextBtn"
-                class="arrow-btn absolute left-0 top-1/2 -translate-y-1/2 z-10 w-12 h-12 md:w-16 md:h-16 flex items-center justify-center rounded-full border-2 border-gray-300 bg-white hover:border-blue-500 transition-all md:-left-20">
-                <svg class="w-6 h-6 md:w-8 md:h-8 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                class="arrow-btn absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 md:w-14 md:h-14 flex items-center justify-center rounded-full border-2  bg-white  shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+                <svg class="w-5 h-5 md:w-7 md:h-7 text-[#CF9411]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                 </svg>
             </button>
@@ -92,30 +116,19 @@
     // Testimonials data
     const testimonials = [
         {
-            text: "They are capable of addressing all the detailed technical aspects of the case upon which the legal issues rest.",
-            client: "Chambers and Partners Global 2025/Int'l Arbitration Client"
+            text: "تم تحصيل مبلغ معدوم من المحامي خالد له عشرين سنة بمبلغ ستة عشر مليون وبعد التواصل مع المحامي خالد تم تحصيل المبلغ بعد معاناة سنوات طويلة .",
         },
         {
-            text: "فريق محترف للغاية ويقدم خدمات قانونية متميزة. لقد ساعدونا في حل قضايا معقدة بكفاءة عالية.",
-            client: "عميل من القطاع الخاص - المملكة العربية السعودية"
+            text: "دين معدوم لدينا في الشركة استطاع الأستاذ تركي تحصليه بعد أن أخرج إفصاح من وزارة العدل بوجود أرض لدى المنفذ ضده، وتم عمل مزاد للأرض فكانت وسيلة ضغط على عميلنا للسداد..",
         },
         {
-            text: "Exceptional expertise in handling complex commercial disputes. Their attention to detail is outstanding.",
-            client: "International Corporate Client - Dubai"
+            text: "يملك الأستاذ تركي مهارة عالية في إقناع العميل بالسداد حيث كان لدى شركتنا أكثر من عميل متعثرين وعليهم تنفيذ لكن بدون جدوى في عملية السداد ،وبعد تواصل الأستاذ تركي معهم و إقناعهم بطرق احترافية تم تحصيل المبالغ من العملاء..",
         },
-        {
-            text: "نشكر الفريق على الاحترافية والالتزام بالمواعيد. كانت النتائج أفضل من المتوقع.",
-            client: "مؤسسة حكومية - الرياض"
-        },
-        {
-            text: "Their strategic approach and deep understanding of regional laws made all the difference in our case.",
-            client: "Legal Affairs Director - Multinational Corporation"
-        }
     ];
 
     let currentIndex = 0;
+    let isAnimating = false;
     const testimonialText = document.getElementById('testimonialText');
-    const clientInfo = document.getElementById('clientInfo');
     const testimonialItem = document.querySelector('.testimonial-item');
     const dotsContainer = document.getElementById('dotsContainer');
     let autoRotateInterval;
@@ -125,11 +138,14 @@
         dotsContainer.innerHTML = '';
         testimonials.forEach((_, index) => {
             const dot = document.createElement('button');
-            dot.className = `dot w-3 h-3 rounded-full transition-all ${index === 0 ? 'bg-blue-600 w-8' : 'bg-gray-300'}`;
+            dot.className = `dot w-3 h-3 rounded-full transition-all duration-300 ${index === 0 ? 'bg-[#CF9411] w-8' : 'bg-[#CF9411]'
+                }`;
             dot.setAttribute('data-index', index);
             dot.addEventListener('click', () => {
-                goToTestimonial(index);
-                resetAutoRotate();
+                if (!isAnimating) {
+                    goToTestimonial(index);
+                    resetAutoRotate();
+                }
             });
             dotsContainer.appendChild(dot);
         });
@@ -137,59 +153,67 @@
 
     // Update testimonial
     function updateTestimonial(index) {
+        if (isAnimating || index === currentIndex) return;
+
+        isAnimating = true;
         testimonialItem.classList.add('fade-out');
 
         setTimeout(() => {
             testimonialText.textContent = testimonials[index].text;
-            clientInfo.textContent = testimonials[index].client;
             currentIndex = index;
 
             // Update dots
             const dots = document.querySelectorAll('.dot');
             dots.forEach((dot, i) => {
                 if (i === index) {
-                    dot.classList.remove('bg-gray-300', 'w-3');
-                    dot.classList.add('bg-blue-600', 'w-8');
+                    dot.classList.remove('bg-[#CF9411]', 'w-3');
+                    dot.classList.add('bg-[#CF9411]', 'w-8');
                 } else {
-                    dot.classList.remove('bg-blue-600', 'w-8');
-                    dot.classList.add('bg-gray-300', 'w-3');
+                    dot.classList.remove('bg-[#CF9411]', 'w-8');
+                    dot.classList.add('bg-[#CF9411]', 'w-3');
                 }
             });
 
+            testimonialItem.classList.remove('fade-out');
+            testimonialItem.classList.add('fade-in');
+
             setTimeout(() => {
-                testimonialItem.classList.remove('fade-out');
-                testimonialItem.classList.add('fade-in');
-            }, 50);
+                isAnimating = false;
+            }, 100);
         }, 500);
     }
 
     // Go to specific testimonial
     function goToTestimonial(index) {
-        if (index !== currentIndex) {
+        if (index !== currentIndex && !isAnimating) {
             updateTestimonial(index);
         }
     }
 
     // Next testimonial
     function nextTestimonial() {
-        const nextIndex = (currentIndex + 1) % testimonials.length;
-        updateTestimonial(nextIndex);
+        if (!isAnimating) {
+            const nextIndex = (currentIndex + 1) % testimonials.length;
+            updateTestimonial(nextIndex);
+        }
     }
 
     // Previous testimonial
     function prevTestimonial() {
-        const prevIndex = (currentIndex - 1 + testimonials.length) % testimonials.length;
-        updateTestimonial(prevIndex);
+        if (!isAnimating) {
+            const prevIndex = (currentIndex - 1 + testimonials.length) % testimonials.length;
+            updateTestimonial(prevIndex);
+        }
     }
 
     // Auto-rotate testimonials
     function startAutoRotate() {
         autoRotateInterval = setInterval(() => {
             nextTestimonial();
-        }, 6000); // Change every 6 seconds
+        }, 6000);
     }
 
-    // Reset auto-rotate (useful when user manually navigates)
+    // Reset auto-rotate
     function resetAutoRotate() {
         clearInterval(autoRotateInterval);
         startAutoRotate();
@@ -206,7 +230,32 @@
         resetAutoRotate();
     });
 
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') {
+            nextTestimonial();
+            resetAutoRotate();
+        } else if (e.key === 'ArrowRight') {
+            prevTestimonial();
+            resetAutoRotate();
+        }
+    });
+
+    // Pause on hover
+    testimonialItem.addEventListener('mouseenter', () => {
+        clearInterval(autoRotateInterval);
+    });
+
+    testimonialItem.addEventListener('mouseleave', () => {
+        startAutoRotate();
+    });
+
     // Initialize
     createDots();
     startAutoRotate();
+
+    // Cleanup on page unload
+    window.addEventListener('beforeunload', () => {
+        clearInterval(autoRotateInterval);
+    });
 </script>

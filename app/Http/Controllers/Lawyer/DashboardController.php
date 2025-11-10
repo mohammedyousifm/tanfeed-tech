@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Complaint;
+use App\Models\User;
 
 class DashboardController extends Controller
 {
@@ -13,11 +14,11 @@ class DashboardController extends Controller
     {
         $user = Auth::user();
 
-        // 1️⃣ عدد العملاء (only users with role = merchant)
-        $merchantCount = \App\Models\User::where('role', 'merchant')->count();
+        // 1️⃣ عدد العملاء (التجار)
+        $merchantCount = User::where('role', 'merchant')->count();
 
         // 2️⃣ عدد جميع الشكاوى
-        $totalComplaints = \App\Models\Complaint::count();
+        $totalComplaints = Complaint::count();
 
         // 3️⃣ عدد الشكاوى حسب الحالة
         $stats = [
@@ -29,6 +30,17 @@ class DashboardController extends Controller
             'suspended'    => Complaint::where('status', 'suspended')->count(),
         ];
 
-        return view('dashboard.lawyer.index', compact('user', 'stats', 'merchantCount', 'totalComplaints'));
+        // 4️⃣ إجمالي المبالغ
+        $totalAmountRemaining = Complaint::sum('amount_remaining');
+        $totalAmountCollated  = Complaint::sum('amount_collated');
+
+        return view('dashboard.lawyer.index', compact(
+            'user',
+            'stats',
+            'merchantCount',
+            'totalComplaints',
+            'totalAmountRemaining',
+            'totalAmountCollated'
+        ));
     }
 }

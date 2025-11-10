@@ -25,12 +25,12 @@ class CollectionsCollections extends Controller
         try {
             // ✅ Validate input
             $request->validate([
-                'complaint_id'      => 'required|exists:complaints,id',
-                'collection_date'   => 'required|date',
-                'amount'            => 'required|numeric|min:0',
-                'collection_receipt' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
-                'tanfeed_fee'       => 'nullable|numeric|min:0',
-                'tanfeed_receipt'   => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+                'complaint_id'        => 'required|exists:complaints,id',
+                'collection_date'     => 'required|date',
+                'amount'              => 'required|numeric|min:0',
+                'collection_receipt'  => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+                'tanfeed_fee'         => 'nullable|numeric|min:0',
+                'tanfeed_receipt'     => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
             ]);
 
             // ✅ Handle file uploads safely
@@ -42,18 +42,30 @@ class CollectionsCollections extends Controller
                 ? $request->file('tanfeed_receipt')->store('collections/tanfeed', 'public')
                 : null;
 
+            // ✅ Get the related complaint
+            $complaint = Complaint::findOrFail($request->complaint_id);
+
             // ✅ Create collection record
             $collection = new Collection();
-            $collection->complaint_id = $request->complaint_id;
-            $collection->collector_id = Auth::id();
-            $collection->collection_date = $request->collection_date;
-            $collection->amount = $request->amount;
+            $collection->complaint_id       = $complaint->id;
+            $collection->collector_id       = Auth::id();
+            $collection->collection_date    = $request->collection_date;
+            $collection->amount             = $request->amount;
             $collection->collection_receipt = $collectionReceiptPath;
-            $collection->tanfeed_fee = $request->tanfeed_fee;
-            $collection->tanfeed_receipt = $tanfeedReceiptPath;
+            $collection->tanfeed_fee        = $request->tanfeed_fee;
+            $collection->tanfeed_receipt    = $tanfeedReceiptPath;
             $collection->save();
 
-            return back()->with('success', 'تم حفظ التحصيل بنجاح.');
+            // ✅ Update complaint financial fields
+            $complaint->amount_collated  += $request->amount; // add to total collected
+            $complaint->amount_paid      += $request->amount; // optional: track total paid
+            $complaint->amount_remaining = max(0, $complaint->amount_remaining - $request->amount); // prevent negative
+            if ($complaint->amount_remaining <= 0) {
+                $complaint->status = 'completed';
+            }
+            $complaint->save();
+
+            return back()->with('success', 'تم حفظ التحصيل وتحديث بيانات الشكوى بنجاح.');
         } catch (Exception $e) {
             // 🧠 Log the error for debugging
             Log::error('Collection store failed: ' . $e->getMessage());
@@ -61,6 +73,7 @@ class CollectionsCollections extends Controller
             return back()->with('error', 'حدث خطأ أثناء حفظ التحصيل، يرجى المحاولة لاحقًا.');
         }
     }
+
 
     public function uploadTanfeed(Request $request)
     {

@@ -1,0 +1,61 @@
+#complaintsubmiteForm .form-input {
+    transition: var(--transition);
+    border: 1px solid #e5e7eb;
+}
+
+#complaintsubmiteForm .form-input:focus {
+    outline: none;
+    border-color: var(--color-green);
+    box-shadow: 0 0 0 3px rgba(29, 153, 66, 0.1);
+}
+
+#complaintsubmiteForm .form-label {
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--color-black);
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+/* Move the select dropdown arrow to the left for RTL layout */
+select.form-input {
+    direction: rtl;
+    text-align: right;
+    background-position: left 0.75rem center !important;
+    background-repeat: no-repeat;
+    background-size: 1rem;
+}
+
+#complaintsubmiteForm .form-section {
+    background-color: var(--color-white);
+    border-radius: var(--radius-md);
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+#complaintsubmiteForm .section-title {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--color-black);
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid var(--color-gray);
+    display: flex;
+    align-items: center;
+}
+
+#complaintsubmiteForm .section-title i {
+    margin-left: 0.5rem;
+    color: #1b7a75;
+}
+
+@media (min-width: 1024px) {
+    #complaintsubmiteForm .sidebar.collapsed {
+        transform: translateX(0);
+    }
+
+    #complaintsubmiteForm .main-content.expanded {
+        margin-right: 0;
+    }
+}

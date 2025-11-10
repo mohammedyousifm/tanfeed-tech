@@ -5,12 +5,14 @@
 
     <title>@yield('title', 'تنفيذ تك')</title>
 
-    <link rel="shortcut icon" href="{{ asset('landing/font-1.ico') }}" type="image/x-icon">
+    <link rel="shortcut icon" href="{{ asset('logo/hlol-logo.ico') }}" type="image/x-icon">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
 
+    {{-- Main style --}}
+    <link rel="stylesheet" href="{{ asset('main/main.css') }}">
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -20,15 +22,6 @@
     <link rel="stylesheet" href="{{ asset('landing/style.css') }}">
 
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap');
-
-
-
-        body {
-            font-family: 'Cairo', sans-serif;
-        }
-
-
         .video-container {
             position: absolute;
             top: 0;
@@ -56,7 +49,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, rgba(20, 40, 60, 0.20), rgba(40, 60, 80, 90));
+            background: linear-gradient(135deg, rgba(20, 40, 60, 0.1), rgba(40, 60, 80, 40));
         }
 
         @keyframes fadeInUp {

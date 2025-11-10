@@ -16,20 +16,6 @@
 }
 
 /* ==============================
-   🧍‍♂️ Base Styles
-   ============================== */
-body {
-    font-family: "Cairo", sans-serif;
-    background-color: var(--color-gray);
-    color: var(--color-black);
-    line-height: 1.7;
-}
-
-* {
-    scroll-behavior: smooth;
-}
-
-/* ==============================
    🧰 Helper Classes
    ============================== */
 

@@ -6,6 +6,7 @@ use App\Http\Controllers\Collector\DashboardController;
 use App\Http\Controllers\Collector\ComplaintController;
 use App\Http\Controllers\Collector\FollowUpController;
 use App\Http\Controllers\Collector\CollectionsCollections;
+use App\Http\Controllers\Collector\SettingsController;
 
 
 Route::middleware(['auth', 'collector'])->group(function () {
@@ -24,4 +25,7 @@ Route::middleware(['auth', 'collector'])->group(function () {
     Route::get('/collector/complaints/{id}/collections', [CollectionsCollections::class, 'index'])->name('collector.complaints.collections');
     Route::Post('/collector/complaints/collections/store', [CollectionsCollections::class, 'store'])->name('collector.collections.store');
     Route::Post('/collector/collections/upload-tanfeed', [CollectionsCollections::class, 'uploadTanfeed'])->name('collector.collections.uploadTanfeed');
+
+    // settings
+    Route::get('/collector/settings', [SettingsController::class, 'index'])->name('collector.settings.index');
 });

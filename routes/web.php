@@ -9,31 +9,107 @@ use App\Http\Controllers\Merchant\ComplaintController;
 use App\Http\Controllers\Merchant\FollowUpController;
 use App\Http\Controllers\Merchant\CollectionsCollections;
 use App\Http\Controllers\Merchant\SettingsController;
+use App\Http\Controllers\Merchant\NotificationController;
+use App\Http\Controllers\Merchant\ContractController;
+use App\Http\Controllers\ContactController;
+use App\Mail\AdminNewUserRegistered;
+use Illuminate\Support\Facades\Mail;
+use App\Models\User;
 
+
+Route::get('/test-admin-mail', function () {
+    $user = User::first(); // or create a dummy user
+    Mail::to(['mahmadyasaf020@gmail.com', 'mkntttlyayzwl@gmail.com'])
+        ->send(new AdminNewUserRegistered($user));
+
+    return '✅ Test mail sent!';
+});
+
+/*
+     |--------------------------------------------------------------------------
+     | Public Routes
+     |--------------------------------------------------------------------------
+     */
 
 Route::get('/', [LandingPageController::class, 'index'])->name('landing');
+Route::get('/license', [LandingPageController::class, 'license'])->name('license');
+Route::post('/contact/send', [ContactController::class, 'send'])->name('contact.send');
 
-Route::get('/company-profiles', [CompanyProfileController::class, 'index'])->name('company_profiles.index');
-Route::post('/company-profiles', [CompanyProfileController::class, 'store'])->name('company_profiles.store');
+/*
+     |--------------------------------------------------------------------------
+     | Contract Upload (No Middleware)
+     |--------------------------------------------------------------------------
+*/
 
+Route::middleware(['auth'])->group(function () {
+    Route::get('/contract/upload', [ContractController::class, 'index'])->name('contract.upload');
+    Route::post('/contract/upload', [ContractController::class, 'store'])->name('contract.store');
+});
+/*
+     |--------------------------------------------------------------------------
+     | Authenticated Merchant Routes (Partially Protected)
+     |--------------------------------------------------------------------------
+     | Routes that require the user to be authenticated and have merchant role,
+     | but not necessarily verified.
+     */
+Route::middleware(['auth'])->group(function () {
+    Route::get('/errors/not-active', [DashboardController::class, 'notactive'])->name('not-active');
+});
+
+/*
+     |--------------------------------------------------------------------------
+     | Verified Merchant Routes
+     |--------------------------------------------------------------------------
+     | Routes that require authentication, email verification, and merchant role.
+     */
 Route::middleware(['auth', 'verified', 'merchant'])->group(function () {
-    // dashboard
-    Route::get('/merchant/dashboard', [DashboardController::class, 'index'])->name('merchant.dashboard');
 
-    // Complaints
-    Route::get('/merchant/complaints', [ComplaintController::class, 'index'])->name('merchant.complaints.index');
-    Route::get('/merchant/complaints/create', [ComplaintController::class, 'create'])->name('merchant.complaints.create');
-    Route::post('/merchant/complaints/create', [ComplaintController::class, 'store'])->name('merchant.complaints.store');
+    /*
+    |----------------------------------------------------------------------
+    | Dashboard
+    |----------------------------------------------------------------------
+    */
+    Route::get('/merchant/dashboard', [DashboardController::class, 'index'])
+        ->name('merchant.dashboard');
 
-    // settings
-    Route::get('/merchant/settings', [SettingsController::class, 'index'])->name('merchant.settings.index');
+    /*
+    |----------------------------------------------------------------------
+    | Complaints
+    |----------------------------------------------------------------------
+    */
+    Route::prefix('merchant/complaints')->name('merchant.complaints.')->group(function () {
+        Route::get('/', [ComplaintController::class, 'index'])->name('index');
+        Route::get('/create', [ComplaintController::class, 'create'])->name('create');
+        Route::post('/store', [ComplaintController::class, 'store'])->name('store');
+        Route::get('/{id}/show', [ComplaintController::class, 'show'])->name('show');
+        Route::post('/import', [ComplaintController::class, 'import'])->name('import');
+        Route::get('/pending', [ComplaintController::class, 'pending'])->name('pending');
+        Route::get('/{id}/followup', [FollowUpController::class, 'index'])->name('followup');
+        Route::get('/{id}/collections', [CollectionsCollections::class, 'index'])->name('collections');
 
+        Route::post('/{complaint}/attachments', [ComplaintController::class, 'attachments_store'])
+            ->name('attachments.store');
+    });
 
-    // Follow Up
-    Route::get('/merchant/complaints/{id}/followup', [FollowUpController::class, 'index'])->name('merchant.complaints.followup');
+    /*
+    |----------------------------------------------------------------------
+    | Settings
+    |----------------------------------------------------------------------
+    */
+    Route::get('/merchant/settings', [SettingsController::class, 'index'])
+        ->name('merchant.settings.index');
 
-    // collections
-    Route::get('/merchant/complaints/{id}/collections', [CollectionsCollections::class, 'index'])->name('merchant.complaints.collections');
+    /*
+    |----------------------------------------------------------------------
+    | Notifications
+    |----------------------------------------------------------------------
+    */
+    Route::prefix('merchant')->group(function () {
+        Route::get('/notifications', [NotificationController::class, 'index'])
+            ->name('merchant.settings.notifications');
+        // Route::post('/notifications/mark-all-read', [NotificationController::class, 'markAllRead'])
+        //     ->name('notifications.markAllRead');
+    });
 });
 
 

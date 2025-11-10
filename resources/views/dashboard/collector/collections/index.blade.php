@@ -19,7 +19,7 @@
             <div class="bg-white rounded-lg shadow-soft p-6">
                 <!-- Header -->
                 <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
-                    <h2 class="text-1xl font-bold text-green mb-4 md:mb-0">
+                    <h2 class="text-1xl font-bold text-[#CF9411] mb-4 md:mb-0">
                         التحصيلات للقضية رقم #{{ $complaint->serial_number }}
                     </h2>
                 </div>
@@ -34,6 +34,9 @@
                                 <th class="px-4 py-3 border-b">المبلغ المتحصل</th>
                                 <th class="px-4 py-3 border-b">صورة التحويل ( مرفق)</th>
                                 <th class="px-4 py-3 border-b">اسم المحصل</th>
+                                <th class="px-4 py-3 border-b">نسبة المحصل</th>
+                                <th class="px-4 py-3 border-b"> تحويل نسبة المحصل
+                                </th>
                             </tr>
                         </thead>
 
@@ -71,6 +74,33 @@
                                         <span class="text-green font-semibold">{{ $collection->collector->name }}</span>
                                     </td>
 
+                                    <td class="px-4 py-3 whitespace-nowrap">
+                                        @if($collection->collector_fee)
+                                            {{ number_format($collection->collector_fee, 0) }} ريال
+                                        @else
+                                            <span class="text-gray-400">لا يوجد</span>
+                                        @endif
+                                    </td>
+
+                                    {{-- collector_fee_receipt --}}
+                                    <td class="px-4 py-3">
+                                        <div class="flex flex-col gap-1">
+                                            @if($collection->collector_fee_receipt)
+                                                <a href="{{ asset('storage/' . $collection->collector_fee_receipt) }}"
+                                                    target="_blank" class="text-yellow-600 hover:underline flex items-center gap-1">
+                                                    <i class="fas fa-file-invoice-dollar"></i>
+                                                    <span>عرض إيصال المحصل</span>
+                                                </a>
+                                            @else
+                                                <button type="button" onclick="openTanfeedModal({{ $collection->id }})"
+                                                    class="text-green-600 hover:underline flex items-center gap-1">
+                                                    <i class="fas fa-upload"></i>
+                                                    <span>رفع إيصال المحصل</span>
+                                                </button>
+                                            @endif
+                                        </div>
+                                    </td>
+
 
 
                                 </tr>
@@ -86,7 +116,7 @@
                 </div>
 
                 <button id="addCollectionBtn"
-                    class="btn mt-3 btn-green hover-up text-sm font-semibold flex items-center gap-2">
+                    class="btn mt-3 bg-[#1B7A75] hover:bg-[#16615C] text-white hover-up text-sm font-semibold flex items-center gap-2">
                     <i class="fas fa-plus"></i> إضافة تحصيل
                 </button>
 

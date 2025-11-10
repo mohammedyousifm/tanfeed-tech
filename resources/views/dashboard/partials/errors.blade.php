@@ -2,9 +2,9 @@
 @if (session('success') || session('error'))
     <div class="fixed top-5 left-1/2 transform -translate-x-1/2 z-[999999] w-auto max-w-[90%]">
         @if (session('success'))
-            <div style="background-color: #1d9942" id="success-alert"
+            <div style="background-color: #1B7A75" id="success-alert"
                 class="mb-2 bg-green-500 text-white font-medium px-6 py-3 rounded-xl shadow-lg animate-fade-in">
-                <strong>✔ تم بنجاح:</strong> {{ session('success') }}
+                <strong>✔:</strong> {{ session('success') }}
             </div>
         @endif
 
@@ -60,6 +60,6 @@
                 alert.classList.add('animate-fade-out');
                 setTimeout(() => alert.remove(), 500);
             });
-        }, 5000); // auto-hide after 4s
+        }, 9000); // auto-hide after 4s
     });
 </script>

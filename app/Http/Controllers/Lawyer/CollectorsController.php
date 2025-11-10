@@ -88,4 +88,15 @@ class CollectorsController extends Controller
                 ->with('error', 'حدث خطأ أثناء تحديث حالة الشكوى. الرجاء المحاولة لاحقًا.');
         }
     }
+
+    public function destroy($id)
+    {
+        $collector = User::findOrFail($id);
+
+        $collector->delete();
+
+        return redirect()
+            ->back()
+            ->with('success', 'تم حذف المحصل بنجاح.');
+    }
 }

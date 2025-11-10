@@ -2,7 +2,7 @@
 @section('title', '404 - الصفحة غير موجودة')
 
 @section('contain')
-    <section class="min-h-screen flex-center flex-col text-center bg-white">
+    <section class="min-h-screen flex-center flex-col text-center">
         <div class="container py-20">
             <div class="max-w-md mx-auto bg-gray-50 rounded-lg shadow-soft p-10">
 

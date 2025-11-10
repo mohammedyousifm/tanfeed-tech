@@ -15,17 +15,29 @@ class ComplaintController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        $user = Auth::user();
 
-        $user =   Auth::user();
-        $complaints = Complaint::whereJsonContains('collector_ids', $user->id)
-            ->orderBy('created_at', 'desc')
-            ->paginate(10);
+        $query = Complaint::where('collector_id', $user->id);
 
+        // ✅ Apply search filter if provided
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+
+            $query->where(function ($q) use ($search) {
+                $q->where('client_name', 'like', "%{$search}%")
+                    ->orWhere('serial_number', 'like', "%{$search}%")
+                    ->orWhere('contract_number', 'like', "%{$search}%")
+                    ->orWhere('client_city', 'like', "%{$search}%");
+            });
+        }
+
+        $complaints = $query->orderBy('created_at', 'desc')->paginate(10);
 
         return view('dashboard.collector.complaints.index', compact('complaints', 'user'));
     }
+
 
     /**
      * Display the specified complaint with merchant details.

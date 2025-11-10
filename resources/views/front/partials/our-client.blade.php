@@ -11,52 +11,53 @@
             <h2 class="text-2xl font-bold text-gray-800 mb-4">
                 من عملائنا
             </h2>
-            <div class="w-24 h-1 bg-[#e2d392] mx-auto"></div>
+            <div class="w-24 h-1 bg-[#CF9411] mx-auto"></div>
         </div>
 
         <!-- Logos Grid -->
         <div class="grid grid-cols-2 md:grid-cols-3 gap-5" id="logoGrid">
             <!-- Logo 1 -->
             <div class="logo-item flex items-center justify-center p-2   transition-shadow">
-                <img src="https://nuqtahweb.com/wp-content/themes/nuqtahweb/assets/img/logo-ng.png" width="200"
-                    alt="نقطة ويب " width="200">
+                <img src="https://nuqtahweb.com/wp-content/themes/nuqtahweb/assets/img/logo-ng.png" width="180"
+                    alt="نقطة ويب " width="180">
             </div>
 
             <!-- Logo 2 -->
             <div class="logo-item flex items-center justify-center p-2  transition-shadow">
-                <img src="https://nuqtahweb.com/wp-content/themes/nuqtahweb/assets/img/logo-ng.png" alt="نظام آجل"
-                    width="200">
+                <img src="{{ asset('landing/images/—Pngtree—creative company logo_1197025.png') }}" alt="نظام آجل"
+                    width="180">
             </div>
 
             <!-- Logo 3 -->
             <div class="logo-item flex items-center justify-center p-2 transition-shadow">
                 <img src="https://nuqtahweb.com/wp-content/themes/nuqtahweb/assets/img/logo-ng.png" alt=" وزارة الصحة"
-                    width="200">
+                    width="180">
             </div>
 
             <!-- Logo 4 -->
-            <div class="logo-item flex items-center justify-center p-2 transition-shadow">
-                <img src="https://nuqtahweb.com/wp-content/themes/nuqtahweb/assets/img/logo-ng.png" alt="Study Group"
-                    width="200">
+
+            <div class="logo-item flex items-center justify-center p-2  transition-shadow">
+                <img src="{{ asset('landing/images/—Pngtree—creative company logo_1197025.png') }}" alt="نظام آجل"
+                    width="180">
             </div>
 
             <!-- Logo 5 -->
             <div class="logo-item flex items-center justify-center p-2    transition-shadow">
                 <img src="https://nuqtahweb.com/wp-content/themes/nuqtahweb/assets/img/logo-ng.png"
-                    alt=" وزارة البيئة والمياه والزراعة" width="200">
+                    alt=" وزارة البيئة والمياه والزراعة" width="180">
             </div>
 
             <!-- Logo 6 -->
-            <div class="logo-item flex items-center justify-center p-2    transition-shadow">
-                <img src="https://nuqtahweb.com/wp-content/themes/nuqtahweb/assets/img/logo-ng.png" alt="المملكة"
-                    width="200">
+            <div class="logo-item flex items-center justify-center p-2  transition-shadow">
+                <img src="{{ asset('landing/images/—Pngtree—creative company logo_1197025.png') }}" alt="نظام آجل"
+                    width="180">
             </div>
         </div>
 
         <!-- Navigation Dots -->
         <div class="flex justify-center mt-12 gap-2" id="dots">
-            <button class="dot w-3 h-3 rounded-full bg-blue-600 transition-all" data-index="0"></button>
-            <button class="dot w-3 h-3 rounded-full bg-gray-300 transition-all" data-index="1"></button>
+            <button class="dot w-3 h-3 rounded-full bg-[#CF9411] transition-all" data-index="0"></button>
+            <button class="dot w-3 h-3 rounded-full bg-[#CF9411] transition-all" data-index="1"></button>
         </div>
     </div>
 </section>
@@ -80,16 +81,6 @@
 <script>
     // All logos data (you can replace these with your actual logo URLs)
     const allLogos = [
-        // Set 1
-        [
-            { src: 'https://via.placeholder.com/200x80/4A5568/FFFFFF?text=HRDA', alt: 'هيئة تطوير منطقة المدينة المنورة' },
-            { src: 'https://via.placeholder.com/200x80/10B981/FFFFFF?text=Customs', alt: 'الجمارك السعودية' },
-            { src: 'https://via.placeholder.com/200x80/059669/FFFFFF?text=MOH', alt: 'وزارة الصحة' },
-            { src: 'https://via.placeholder.com/200x80/EF4444/FFFFFF?text=Study+Group', alt: 'Study Group' },
-            { src: 'https://via.placeholder.com/200x80/8B5CF6/FFFFFF?text=Ministry', alt: 'وزارة البيئة والمياه والزراعة' },
-            { src: 'https://via.placeholder.com/200x80/047857/FFFFFF?text=Kingdom', alt: 'المملكة' }
-        ],
-        // Set 2 (you can add more clients here)
         [
             { src: 'https://ajlapp.com/images/logoajil2.png', alt: 'عميل 7' },
             { src: 'https://nuqtahweb.com/wp-content/themes/nuqtahweb/assets/img/logo-ng.png"', alt: 'عميل 8' },

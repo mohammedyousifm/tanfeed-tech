@@ -1,18 +1,19 @@
 @extends('auth.app')
-@section('title', 'التحقق من البريد الإلكتروني - تنفيذ تك')
+@section('title', 'تنفيذ تك - التحقيق من البريد')
 @section('contain')
 
-    <section class="py-12 md:py-16 min-h-screen flex items-center">
+    <section class="min-h-screen flex items-center">
         <div class="container">
             <div class="max-w-md mx-auto">
                 <!-- Form Card -->
-                <div class="bg-white rounded-lg shadow-strong p-6 md:p-10">
+                <div class="bg-white rounded-lg shadow-strong p-6">
                     <!-- Icon & Title -->
                     <div class="text-center mb-8">
-                        <div class="w-20 h-20 bg-green rounded-lg flex-center mx-auto mb-4">
+                        <div
+                            class="w-20 h-20 bg-gradient-to-r from-yellow-600 to-yellow-200 rounded-lg flex-center mx-auto mb-4">
                             <i class="fas fa-sign-in-alt text-white text-3xl"></i>
                         </div>
-                        <h1 class="text-2xl md:text-2xl font-bold text-black mb-2">التحقق من البريد الإلكتروني</h1>
+                        <h1 class="text-1xl font-bold text-black mb-2">التحقق من البريد الإلكتروني</h1>
 
                     </div>
 
@@ -31,13 +32,13 @@
                             @csrf
 
                             <div>
-                                <x-primary-button>
-                                    {{ __('إعادة إرسال بريد إلكتروني للتحقق') }}
-                                </x-primary-button>
+                                <button type="submit"
+                                    class="btn bg-[#CF9411] hover:bg-[#16615C] text-white f-12 hover-up">إرسال بريد إلكتروني
+                                    للتحقق</button>
                             </div>
                         </form>
 
-                        <form method="POST" action="{{ route('logout') }}">
+                        <form method="get" action="{{ route('logout') }}">
                             @csrf
 
                             <button type="submit"

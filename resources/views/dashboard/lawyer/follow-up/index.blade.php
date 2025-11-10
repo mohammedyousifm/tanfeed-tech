@@ -3,124 +3,126 @@
 
 @section('Content')
 
-    <!-- Sidebar Overlay for Mobile -->
-    <div id="sidebarOverlay" class="sidebar-overlay fixed inset-0 bg-black bg-opacity-50 lg:hidden z-40"></div>
 
-    <!-- Sidebar -->
-    @include('dashboard.partials.sidebar')
 
-    <!-- Main Content Area -->
-    <div id="mainContent" class="main-content lg:mr-64 transition-all duration-300">
+    <div class="bg-white rounded-lg shadow-soft p-6">
         <!-- Header -->
-        @include('dashboard.partials.header')
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
+            <h2 class="text-1xl font-bold text-[#CF9411] mb-4 md:mb-0">
+                المتابعات للقضية رقم #{{ $complaint->serial_number }}
+            </h2>
+                    <button id="addFollowUpBtn"
+            class="btn bg-[#1B7A75] mt-3 hover:bg-[#16615C] text-white hover-up text-sm font-semibold flex items-center gap-2">
+            <i class="fas fa-plus"></i> إضافة متابعة
+        </button>
+        </div>
 
-        <!-- Main Content -->
-        <main class="p-4 lg:p-2">
-            <!-- Main Content -->
+        <!-- Timeline -->
+        <div class="space-y-8">
+            @forelse($followUps as $follow)
+                <div class="relative border border-gray-400 rounded-md shadow bg-white overflow-hidden">
+                    <div class="bg-gray-100 border-b border-gray-300 px-4 py-2 flex justify-between items-center">
+                   <h3 class="font-bold text-[#1B7A75] f-12">رقم المتابعة:
+                            <td class="border border-gray-400 px-2 py-1">{{ $follow->serial_number ?? '—' }}</td>
+                        </h3>
+                        <span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                    </div>
 
+                    <table class="w-full text-sm text-right border-collapse">
+                        <tbody>
 
-            @include('dashboard.partials.errors')
+                                 <tr>
+                                <td class="border border-gray-400 px-2 py-1 font-semibold">رقم المتصل</td>
+                                <td class="border border-gray-400 px-2 py-1">{{ $follow->call_number ?? 'لا يوجد' }}</td>
+                            </tr>
 
-            <div class="bg-white rounded-lg shadow-soft p-6">
-                <!-- Header -->
-                <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
-                    <h2 class="text-1xl font-bold text-green mb-4 md:mb-0">
-                        المتابعات للقضية رقم #{{ $complaint->serial_number }}
-                    </h2>
+                            <tr>
+                                <td class="border border-gray-400 px-2 py-1 font-semibold">تاريخ الاتصال</td>
+                                <td class="border border-gray-400 px-2 py-1">{{ $follow->call_date ?? 'لا يوجد' }}</td>
+                                <td class="border border-gray-400 px-2 py-1 font-semibold">وقت الاتصال</td>
+                                <td class="border border-gray-400 px-2 py-1">{{ $follow->call_time ?? 'لا يوجد' }}</td>
+                            </tr>
+
+                            <tr>
+                                <td class="border border-gray-400 px-2 py-1 font-semibold">اسم المتصل عليه</td>
+                                <td class="border border-gray-400 px-2 py-1">{{ $follow->called_person_name ?? 'لا يوجد' }}</td>
+                                <td class="border border-gray-400 px-2 py-1 font-semibold">صفته</td>
+                                <td class="border border-gray-400 px-2 py-1">{{ $follow->called_person_role ?? 'لا يوجد' }}</td>
+                            </tr>
+
+                            <tr>
+                                <td class="border border-gray-400 px-2 py-1 font-semibold">موعد سداد</td>
+                                <td class="border border-gray-400 px-2 py-1">
+                                    @if($follow->payment_commitment === 1)
+                                        ✅ نعم
+                                    @elseif($follow->payment_commitment === 0)
+                                        ❎ لا
+                                    @else — @endif
+                                </td>
+                                @if($follow->payment_commitment === 1)
+                                    <td class="border border-gray-400 px-2 py-1 font-semibold">تاريخ الموعد</td>
+                                    <td class="border border-gray-400 px-2 py-1">{{ $follow->payment_date ?? 'لا يوجد' }}</td>
+                                @endif
+                            </tr>
+
+                            <tr>
+                                <td class="border border-gray-400 px-2 py-1 font-semibold">اسم المحصل</td>
+                                <td class="border border-gray-400 px-2 py-1">{{ $follow->collector->name  }}</td>
+                                <td class="border border-gray-400 px-2 py-1 font-semibold">تعليق المكالمة</td>
+                                <td class="border border-gray-400 px-2 py-1">{{ $follow->note ?? 'لا يوجد' }}</td>
+                            </tr>
+
+                            <tr>
+                                <td class="border border-gray-400 px-2 py-1 font-semibold text-red-600">ملاحظة من المحامي</td>
+                                <td class="border border-gray-400 px-2 py-1 text-red-600">
+
+                                    <!-- Editable form -->
+                                    <form action="{{ route('lawyer.followups.update', $follow->id) }}" method="POST" class="space-y-2">
+                                        @csrf
+
+                                        <textarea name="lawyer_comment" rows="2" class="w-full border-gray-300 rounded-md shadow-sm text-sm"
+                                            placeholder="اكتب ملاحظة...">{{ $follow->lawyer_comment }}</textarea>
+
+                                        <div class="flex items-center gap-3">
+                                            <label class="flex items-center gap-1">
+                                                <input type="radio" name="lawyer_approved" value="1"
+                                                    {{ $follow->lawyer_approved === 1 ? 'checked' : '' }}> ✅ نعم
+                                           </label>                                    <label class="flex items-center gap-1">
+                                                <input type="radio" name="lawyer_approved" value="0"
+                                                    {{ $follow->lawyer_approved === 0 ? 'checked' : '' }}> ❎ لا
+                                           </label>
+                                            <button type="submit"
+                                                class="bg-[#1B7A75] text-white px-3 py-1 rounded text-xs hover:bg-[#16615C]">
+                                                حفظ
+                                            </button>
+                                        </div>
+                                    </form>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
-
-                <!-- Timeline -->
-                <div class="relative border-r-4  pr-6">
-                    @forelse($complaint->followUps as $follow)
-                        <div class="mb-4 relative">
-                            <!-- الدائرة -->
-                            <div
-                                class="absolute -right-[17px] top-2 w-4 h-4 bg-green rounded-full border-2 border-white shadow">
-                            </div>
-
-                            <!-- محتوى المتابعة -->
-                            <div class="bg-gray-50 rounded-lg shadow-sm p-4 md:p-2 transition hover:bg-gray-100">
-                                <p class="text-black text-base leading-relaxed mb-2">
-                                    {{ $follow->note }}
-                                </p>
-                                <div class="text-sm flex gap-4 text-gray-700">
-                                    <div>
-                                        <span class="text-red-600 font-semibold">بواسطة:</span>
-                                        <span
-                                            class="text-black font-semibold">{{ $follow->collector->name ?? 'غير معروف' }}</span>
-                                    </div>
-                                    <br>
-                                    <div>
-                                        <span class="text-red-600">تاريخ المتابعة:</span>
-                                        <span class="text-black font-medium">{{ $follow->follow_date ?? '—' }}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    @empty
-                        <div class="text-center py-10 text-gray-500 font-medium">
-                            لا توجد متابعات لهذه الشكوى حتى الآن.
-                        </div>
-                    @endforelse
-                </div>
-
-                <button id="addFollowUpBtn" class="btn btn-green hover-up text-sm font-semibold flex items-center gap-2">
-                    <i class="fas fa-plus"></i> إضافة متابعة
-                </button>
+            @empty
+                <div class="text-center py-10 text-gray-500 font-medium">
+                لا توجد متابعات لهذه الشكوى حتى الآن.
             </div>
+        @endforelse
+        </div>
 
-            <!-- Modal لإضافة متابعة جديدة -->
-            <div id="addFollowUpModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
-                <div class="bg-white rounded-lg shadow-strong w-full max-w-lg mx-4 p-6 relative">
-                    <h3 class="text-xl font-bold text-green mb-4">إضافة متابعة جديدة</h3>
-
-                    <form action="{{ route('lawyer.followups.store') }}" method="POST">
-                        @csrf
-
-                        <input type="hidden" name="complaint_id" value="{{ $complaint->id }}">
-
-                        <div class="mb-4">
-                            <label class="block mb-1 text-gray-700 font-semibold">وسيلة المتابعة</label>
-                            <input type="text" name="method"
-                                class="w-full border-gray-300 rounded-md shadow-sm focus:ring-green focus:border-green"
-                                placeholder="مثلاً: اتصال هاتفي">
-                        </div>
-
-                        <div class="mb-4">
-                            <label class="block mb-1 text-gray-700 font-semibold">تاريخ المتابعة</label>
-                            <input type="date" name="follow_date"
-                                class="w-full border-gray-300 rounded-md shadow-sm focus:ring-green focus:border-green">
-                        </div>
-
-                        <div class="mb-4">
-                            <label class="block mb-1 text-gray-700 font-semibold">تفاصيل المتابعة</label>
-                            <textarea name="note" rows="4"
-                                class="w-full border-gray-300 rounded-md shadow-sm focus:ring-green focus:border-green"
-                                placeholder="اكتب تفاصيل المتابعة..."></textarea>
-                        </div>
-
-                        <div class="flex justify-end gap-3">
-                            <button type="button" id="closeModalBtn" class="btn btn-yellow hover-up">إلغاء</button>
-                            <button type="submit" class="btn prevent-double  btn-green hover-up">حفظ المتابعة</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            <!-- JS -->
-            <script>
-                document.getElementById('addFollowUpBtn').addEventListener('click', () => {
-                    document.getElementById('addFollowUpModal').classList.remove('hidden');
-                    document.getElementById('addFollowUpModal').classList.add('flex');
-                });
-
-                document.getElementById('closeModalBtn').addEventListener('click', () => {
-                    document.getElementById('addFollowUpModal').classList.add('hidden');
-                    document.getElementById('addFollowUpModal').classList.remove('flex');
-                });
-            </script>
-
+    </div>
+        <!-- Modal  -->
+    @include('dashboard.lawyer.models.add-followup')
+        <!-- JS -->
+    <script>
+        document.getElementById('addFollowUpBtn').addEventListener('click', () => {
+            document.getElementById('addFollowUpModal').classList.remove('hidden');
+            document.getElementById('addFollowUpModal').classList.add('flex');
+        });
+            document.getElementById('closeModalBtn').addEventListener('click', () => {
+            document.getElementById('addFollowUpModal').classList.add('hidden');
+            document.getElementById('addFollowUpModal').classList.remove('flex');
+        });
+    </script>
         </main>
     </div>
-
 @endsection

@@ -1,0 +1,61 @@
+/* ==============================
+   🧍‍♂️ Base Styles
+   ============================== */
+body {
+    font-family: "Cairo", sans-serif;
+    background-color: var(--color-gray);
+    color: var(--color-black);
+    line-height: 1.7;
+}
+
+* {
+    scroll-behavior: smooth;
+}
+
+/* ==============================
+   🧰 Helper Classes
+   ============================== */
+
+.f-25 {
+    font-size: 25px !important;
+}
+
+.f-22 {
+    font-size: 22px !important;
+}
+
+.f-20 {
+    font-size: 20px !important;
+}
+
+.f-18 {
+    font-size: 18px !important;
+}
+
+.f-16 {
+    font-size: 16px !important;
+}
+
+.f-15 {
+    font-size: 15px !important;
+}
+
+.f-14 {
+    font-size: 14px !important;
+}
+
+.f-13 {
+    font-size: 12px !important;
+}
+
+.f-12 {
+    font-size: 12px !important;
+}
+
+.f-11 {
+    font-size: 11px !important;
+}
+
+.f-10 {
+    font-size: 10px !important;
+}
