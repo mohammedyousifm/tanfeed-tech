@@ -4,11 +4,13 @@ namespace App\Http\Controllers\Lawyer;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\Complaint;
 use App\Mail\SendContractToUser;
 use Illuminate\Support\Facades\Mail;
+use App\Mail\MerchantStatusChangedMail;
 use Illuminate\Support\Facades\Log;
 use Exception;
 
@@ -42,32 +44,79 @@ class MerchantController extends Controller
 
     public function updateStatus(Request $request, $id)
     {
+        DB::beginTransaction();
+
         try {
-            $request->validate([
+            // -------------------------
+            // 1) Validate
+            // -------------------------
+            $validated = $request->validate([
                 'status' => 'required|in:pending,suspended,active',
             ]);
 
-            $users = User::findOrFail($id);
-            $users->updateQuietly(['status' => $request->status]);
+            // -------------------------
+            // 2) Get User
+            // -------------------------
+            $user = User::findOrFail($id);
+            $oldStatus = $user->status;
+            $newStatus = $validated['status'];
 
-            // Send email only if complaint accepted
-            if ($request->status === 'accepted') {
-                $userMail = $users->user->email;
-                // Mail::to('mahmadyasaf020@gmail.com')->send(new ComplaintAcceptedNotification($complaint));
+            if ($oldStatus === $newStatus) {
+                return back()->with('info', 'الحالة لم تتغير، فهي بالفعل: ' . $user->status_label);
             }
 
-            return redirect()->back()->with('success', 'تم تحديث حالة الشكوى بنجاح.');
-        } catch (Exception $e) {
-            Log::error('Error updating complaint status: ' . $e->getMessage(), [
+            // -------------------------
+            // 3) Update Status
+            // -------------------------
+            $user->update(['status' => $newStatus]);
+
+            // -------------------------
+            // 4) Prepare Email content
+            //    (Using the status_label accessor)
+            // -------------------------
+            $messages = [
+                'active'    => 'لقد تم تفعيل حسابك بنجاح.',
+                'suspended' => 'تم تعليق حسابك. الرجاء التواصل مع الإدارة.',
+                'pending'   => 'تم وضع حسابك في حالة المراجعة.',
+            ];
+
+            $emailText = $messages[$newStatus] ?? 'تم تحديث حالة حسابك.';
+
+            // labels from accessor
+            $oldLabel = (clone $user)->fill(['status' => $oldStatus])->status_label;
+            $newLabel = $user->status_label;
+
+            // -------------------------
+            // 5) Send Email (rollback if fails)
+            // -------------------------
+            if (!empty($user->email)) {
+                Mail::to($user->email)->send(
+                    new MerchantStatusChangedMail($user, $oldLabel, $newLabel, $emailText)
+                );
+            }
+
+            DB::commit();
+
+            return back()->with('success', 'تم تحديث حالة الحساب وإرسال إشعار للمستخدم.');
+        } catch (\Throwable $e) {
+
+            DB::rollBack();
+
+            Log::error('Error updating user status', [
+                'user_id' => $id,
+                'error' => $e->getMessage(),
+                'file'  => $e->getFile(),
+                'line'  => $e->getLine(),
                 'trace' => $e->getTraceAsString(),
             ]);
 
-            return redirect()
-                ->back()
+            return back()
                 ->withInput()
-                ->with('error', 'حدث خطأ أثناء تحديث حالة الشكوى. الرجاء المحاولة لاحقًا.');
+                ->with('error', 'حدث خطأ: ' . $e->getMessage());
         }
     }
+
+
 
     /**
      * Display the specified merchant with merchant details.

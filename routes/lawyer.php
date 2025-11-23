@@ -12,6 +12,8 @@ use App\Http\Controllers\Lawyer\MerchantController;
 use App\Http\Controllers\Lawyer\SettingsController;
 use App\Http\Controllers\Lawyer\NotificationController;
 
+use App\Http\Controllers\Lawyer\settings\ProfileController;
+
 use App\Http\Controllers\Lawyer\Complaints\UpdateStatusController;
 use App\Http\Controllers\Lawyer\Complaints\PaymentDatesController;
 /*
@@ -38,6 +40,9 @@ Route::middleware(['auth', 'lawyer'])->group(function () {
     Route::prefix('lawyer/complaints')->name('lawyer.complaints.')->group(function () {
         Route::get('/', [ComplaintController::class, 'index'])->name('index');
         Route::get('/{id}/show', [ComplaintController::class, 'show'])->name('show');
+        Route::put('/{id}/update-service', [ComplaintController::class, 'updateService'])
+            ->name('complaints.updateService');
+
         Route::delete('/{complaint}', [ComplaintController::class, 'destroy'])->name('destroy');
 
         // Complaint actions
@@ -135,6 +140,8 @@ Route::middleware(['auth', 'lawyer'])->group(function () {
     */
     Route::get('/lawyer/settings', [SettingsController::class, 'index'])
         ->name('lawyer.settings.index');
+    Route::put('/lawyer/settings/profile/update', [ProfileController::class, 'updateProfile'])
+        ->name('lawyer.settings.profile.update');
 
     /*
     |--------------------------------------------------------------------------

@@ -27,8 +27,8 @@ class AdminNewUserRegistered extends Mailable
     public function build()
     {
         return $this
-            ->subject('New User Registered: ' . $this->user->name)
-            ->markdown('emails.admin.new_user_registered')
+            ->subject('تم تسجيل تاجر جديد بنجاح: ' . $this->user->name)
+            ->view('emails.admin.new_user_registered')
             ->with([
                 'user' => $this->user,
             ]);

@@ -25,7 +25,7 @@
                 <div><strong>الاسم التجاري:</strong> {{ $complaint->commercial_name }}</div>
                 <div><strong>رقم السجل التجاري:</strong> {{ $complaint->commercial_record_number }}</div>
                 <div><strong>رقم العقد:</strong> {{ $complaint->contract_number }}</div>
-                <div><strong>الخدمة المطلوبة:</strong> {{ $complaint->service_requested }}</div>
+                <div><strong>الخدمة المطلوبة:</strong> {{ $complaint->service_requested_label    }}</div>
                 <div><strong>المبلغ المطلوب:</strong> {{ number_format($complaint->amount_requested, 2) }} ر.س</div>
                 <div><strong>المبلغ المدفوع:</strong> {{ number_format($complaint->amount_paid, 2) }} ر.س</div>
                 <div><strong>المبلغ المتبقي:</strong> {{ number_format($complaint->amount_remaining, 2) }} ر.س</div>
@@ -34,11 +34,11 @@
                     <strong>الحالة:</strong>
                     <span
                         class="px-3 py-1 rounded-full text-xs font-medium
-                                                                                                                                        @if($complaint->status === 'pending') bg-yellow-100 text-yellow-800
-                                                                                                                                        @elseif($complaint->status === 'completed') bg-green-100 text-green-800
-                                                                                                                                        @elseif($complaint->status === 'cancelled') bg-red-100 text-red-700
-                                                                                                                                        @elseif($complaint->status === 'in_progress') bg-blue-100 text-blue-800
-                                                                                                                                        @else bg-gray-100 text-gray-700 @endif">
+                                                                                                                                                    @if($complaint->status === 'pending') bg-yellow-100 text-yellow-800
+                                                                                                                                                    @elseif($complaint->status === 'completed') bg-green-100 text-green-800
+                                                                                                                                                    @elseif($complaint->status === 'cancelled') bg-red-100 text-red-700
+                                                                                                                                                    @elseif($complaint->status === 'in_progress') bg-blue-100 text-blue-800
+                                                                                                                                                    @else bg-gray-100 text-gray-700 @endif">
                         {{ $complaint->status_label }}
                     </span>
                 </div>
@@ -79,13 +79,14 @@
                         <div class="attachment-item flex items-center gap-4 bg-white p-4 rounded-md border">
                             <div class="flex-1">
                                 <label class="block text-sm font-semibold mb-1">اسم المرفق</label>
-                                <input type="text" name="attachment_names[]"
+                                <input type="text" name="attachment_names[]" required
                                     class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-[#1B7A75]"
                                     placeholder="مثلاً: مستند إضافي">
                             </div>
                             <div class="flex-1">
                                 <label class="block text-sm font-semibold mb-1">اختر الملف</label>
-                                <input type="file" name="attachment_files[]" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+                                <input type="file" name="attachment_files[]" required
+                                    accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
                                     class="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-[#1B7A75]">
                             </div>
                             <button type="button" class="remove-attachment text-red-500 hover:text-red-700 mt-6">
@@ -103,7 +104,7 @@
 
                     <!-- Submit -->
                     <button type="submit"
-                        class="mt-6 bg-[#1B7A75] hover:bg-[#16615C] text-white px-6 py-2 rounded-md text-sm font-semibold">
+                        class="mt-6 prevent-double bg-[#1B7A75] hover:bg-[#16615C] text-white px-6 py-2 rounded-md text-sm font-semibold">
                         حفظ المرفقات
                     </button>
                 </form>

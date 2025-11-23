@@ -14,19 +14,19 @@
 
             <!-- Register Info Section -->
             <div class="border-b pb-4">
-                <h3 class="text-lg font-semibold mb-4 text-[var(--color-green)]">معلومات التسجيل</h3>
+                <h3 class="text-lg font-semibold mb-4 text-[#1B7A75]">معلومات التسجيل</h3>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class=" grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label class="block font-medium text-sm mb-1">اسم مسؤول الحساب</label>
-                        <input type="text" name="account_manager_name"
+                        <input type="text" name="account_manager_name" readonly
                             value="{{ old('account_manager_name', $user->name ?? '') }}"
                             class="w-full border rounded-[var(--radius-sm)] p-2 focus:ring-2 focus:ring-[var(--color-green)]">
                     </div>
 
                     <div>
                         <label class="block font-medium text-sm mb-1">إيميل مسؤول الحساب</label>
-                        <input type="email" name="account_manager_email"
+                        <input type="email" name="account_manager_email" readonly
                             value="{{ old('account_manager_email', $user->email ?? '') }}"
                             class="w-full border rounded-[var(--radius-sm)] p-2 focus:ring-2 focus:ring-[var(--color-green)]">
                     </div>
@@ -35,7 +35,7 @@
 
             <!-- Profile Info Section -->
             <div>
-                <h3 class="text-lg font-semibold mb-4 text-[var(--color-green)]">معلومات الملف الشخصي</h3>
+                <h3 class="text-lg font-semibold mb-4 text-[#1B7A75]">معلومات الملف الشخصي</h3>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
@@ -47,46 +47,47 @@
 
                     <div>
                         <label class="block font-medium text-sm mb-1">رقم السجل التجاري / التأسيس</label>
-                        <input type="text" name="commercial_number"
+                        <input type="text" name="commercial_number" readonly
                             value="{{ old('commercial_number', $Companyinfo->establishment_number ?? '') }}"
                             class="w-full border rounded-[var(--radius-sm)] p-2">
                     </div>
 
                     <div>
                         <label class="block font-medium text-sm mb-1">نوع النشاط</label>
-                        <input type="text" name="business_type"
+                        <input type="text" name="business_type" readonly
                             value="{{ old('business_type', $Companyinfo->business_type ?? '') }}"
                             class="w-full border rounded-[var(--radius-sm)] p-2">
                     </div>
 
                     <div>
                         <label class="block font-medium text-sm mb-1">المدينة</label>
-                        <input type="text" name="city" value="{{ old('city', $Companyinfo->city ?? '') }}"
+                        <input type="text" name="city" readonly value="{{ old('city', $Companyinfo->city ?? '') }}"
                             class="w-full border rounded-[var(--radius-sm)] p-2">
                     </div>
 
                     <div>
                         <label class="block font-medium text-sm mb-1">الحي / المنطقة</label>
-                        <input type="text" name="district" value="{{ old('district', $Companyinfo->district ?? '') }}"
+                        <input type="text" name="district" readonly
+                            value="{{ old('district', $Companyinfo->district ?? '') }}"
                             class="w-full border rounded-[var(--radius-sm)] p-2">
                     </div>
 
                     <div>
                         <label class="block font-medium text-sm mb-1">اسم المدير</label>
-                        <input type="text" name="manager_name"
+                        <input type="text" name="manager_name" readonly
                             value="{{ old('manager_name', $Companyinfo->manager_name ?? '') }}"
                             class="w-full border rounded-[var(--radius-sm)] p-2">
                     </div>
 
                     <div>
                         <label class="block font-medium text-sm mb-1">رقم الهاتف 1</label>
-                        <input type="tel" name="phone_1" value="{{ old('phone_1', $Companyinfo->phone_1 ?? '') }}"
+                        <input type="tel" name="phone_1" readonly value="{{ old('phone_1', $Companyinfo->phone_1 ?? '') }}"
                             class="w-full border rounded-[var(--radius-sm)] p-2">
                     </div>
 
                     <div>
                         <label class="block font-medium text-sm mb-1">رقم الهاتف 2</label>
-                        <input type="tel" name="phone_2" value="{{ old('phone_2', $Companyinfo->phone_2 ?? '') }}"
+                        <input type="tel" name="phone_2" readonly value="{{ old('phone_2', $Companyinfo->phone_2 ?? '') }}"
                             class="w-full border rounded-[var(--radius-sm)] p-2">
                     </div>
 
@@ -99,7 +100,7 @@
 
                     <div>
                         <label class="block font-medium text-sm mb-1">هوية المالك (PDF)</label>
-                        <input type="file" name="owner_id" accept="application/pdf"
+                        <input type="file" name="owner_id" readonly accept="application/pdf"
                             class="w-full border rounded-[var(--radius-sm)] p-2">
                         @if(!empty($Companyinfo->owner_id_pdf))
                             <a href="{{ asset('storage/' . $Companyinfo->owner_id) }}" target="_blank"
@@ -109,7 +110,7 @@
 
                     <div>
                         <label class="block font-medium text-sm mb-1">السجل التجاري</label>
-                        <input type="file" name="commercial_doc" accept="application/pdf"
+                        <input type="file" readonly name="commercial_doc" accept="application/pdf"
                             class="w-full border rounded-[var(--radius-sm)] p-2">
                         @if(!empty($Companyinfo->commercial_record_pdf))
                             <a href="{{ asset('storage/' . $Companyinfo->commercial_doc) }}" target="_blank"
@@ -119,12 +120,12 @@
                 </div>
             </div>
 
-            <div class="pt-6 border-t">
+            {{-- <div class="pt-6 border-t">
                 <button type="submit"
-                    class="bg-[var(--color-green)] text-white px-6 py-2 rounded-[var(--radius-md)] hover:bg-green-700 transition">
+                    class=" prevent-double bg-[#1B7A75] hover:bg-[#16615C] text-white f-12 px-6 py-2 rounded-[var(--radius-md)] hover:bg-green-700 transition">
                     حفظ التعديلات
                 </button>
-            </div>
+            </div> --}}
         </form>
     </div>
 @endsection

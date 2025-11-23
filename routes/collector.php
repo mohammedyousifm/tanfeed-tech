@@ -26,6 +26,14 @@ Route::middleware(['auth', 'collector'])->group(function () {
     Route::Post('/collector/complaints/collections/store', [CollectionsCollections::class, 'store'])->name('collector.collections.store');
     Route::Post('/collector/collections/upload-tanfeed', [CollectionsCollections::class, 'uploadTanfeed'])->name('collector.collections.uploadTanfeed');
 
-    // settings
-    Route::get('/collector/settings', [SettingsController::class, 'index'])->name('collector.settings.index');
+
+    /*
+    |--------------------------------------------------------------------------
+    | Settings
+    |--------------------------------------------------------------------------
+    */
+    Route::get('/collector/settings', [SettingsController::class, 'index'])
+        ->name('collector.settings.index');
+    Route::put('/collector/settings/profile/update', [SettingsController::class, 'updateProfile'])
+        ->name('collector.settings.profile.update');
 });

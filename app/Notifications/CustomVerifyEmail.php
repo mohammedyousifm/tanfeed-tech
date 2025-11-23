@@ -18,7 +18,7 @@ class CustomVerifyEmail extends VerifyEmailNotification
 
         return (new MailMessage)
             ->subject('تأكيد البريد الإلكتروني الخاص بك')
-            ->markdown('emails.verify', [
+            ->view('emails.verify', [
                 'url' => $verificationUrl,
                 'user' => $notifiable,
             ]);

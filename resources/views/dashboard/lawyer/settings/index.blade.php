@@ -8,7 +8,8 @@
         </h2>
 
         {{-- Profile Update Form --}}
-        <form action="" method="POST" enctype="multipart/form-data" class="space-y-6">
+        <form action="{{ route('lawyer.settings.profile.update') }}" method="POST" enctype="multipart/form-data"
+            class="space-y-6">
             @csrf
             @method('PUT')
 
@@ -19,15 +20,13 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label class="block font-medium text-sm mb-1">اسم</label>
-                        <input type="text" name="account_manager_name"
-                            value="{{ old('account_manager_name', $user->name ?? '') }}"
+                        <input type="text" name="name" value="{{ old('account_manager_name', $user->name ?? '') }}"
                             class="w-full border f-11 rounded-[var(--radius-sm)] p-2 focus:ring-2 focus:ring-[var(--color-green)]">
                     </div>
 
                     <div>
                         <label class="block font-medium text-sm mb-1">إيميل</label>
-                        <input type="email" name="account_manager_email"
-                            value="{{ old('account_manager_email', $user->email ?? '') }}"
+                        <input type="email" name="email" value="{{ old('account_manager_email', $user->email ?? '') }}"
                             class="w-full border f-11 rounded-[var(--radius-sm)] p-2 focus:ring-2 focus:ring-[var(--color-green)]">
                     </div>
                 </div>

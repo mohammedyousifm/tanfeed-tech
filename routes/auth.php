@@ -36,6 +36,10 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
+
+    Route::get('/activate/{id}/{hash}', [EmailVerificationNotificationController::class, 'activate'])->name('account.activate');
+
+
     Route::get('verify-email', EmailVerificationPromptController::class)
         ->name('verification.notice');
 

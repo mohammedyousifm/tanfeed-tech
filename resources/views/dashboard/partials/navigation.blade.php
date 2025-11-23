@@ -93,21 +93,22 @@
 
             <li>
                 <a href="{{ route('collector.dashboard') }}"
-                    class="nav-link active flex items-center space-x-3 space-x-reverse p-2 rounded-md">
+                    class="nav-link {{ request()->routeIs('collector.dashboard') ? 'active' : '' }} flex items-center space-x-3 space-x-reverse p-2 rounded-md">
                     <i class="fas fa-home text-[#1B7A75] text-lg w-5"></i>
                     <span class="font-medium">الرئيسية</span>
                 </a>
             </li>
 
             <a href="{{ route('collector.complaints.index') }}"
-                class="nav-link flex items-center space-x-3 space-x-reverse p-2 rounded-md text-gray-700">
+                class="nav-link {{ request()->routeIs('collector.complaints.index') ? 'active' : '' }} flex items-center space-x-3 space-x-reverse p-2 rounded-md text-gray-700">
                 <i class="fas fa-chart-bar text-[#1B7A75] text-lg w-5"></i>
                 <span class="font-medium">الطلبات</span>
             </a>
 
 
             <li>
-                <a href="#" class="nav-link flex items-center space-x-3 space-x-reverse p-2 rounded-md text-gray-700">
+                <a href="{{ route('collector.settings.index') }}"
+                    class="nav-link  {{ request()->routeIs('collector.settings.index') ? 'active' : '' }} flex items-center space-x-3 space-x-reverse p-2 rounded-md text-gray-700">
                     <i class="fas fa-cog text-[#1B7A75] text-lg w-5"></i>
                     <span class="font-medium">الإعدادات</span>
                 </a>
@@ -133,13 +134,6 @@
                 <i class="fas fa-chart-bar text-[#1B7A75] text-lg w-5"></i>
                 <span class="font-medium">الطلبات</span>
             </a>
-
-            <li>
-                <a href="#" class="nav-link  flex items-center space-x-3 space-x-reverse p-2 rounded-md text-gray-700">
-                    <i class="fas fa-box text-[#1B7A75] text-lg w-5"></i>
-                    <span class="font-medium">الدعم الفني</span>
-                </a>
-            </li>
 
             <li>
                 <a href="{{ route('merchant.complaints.pending') }}"

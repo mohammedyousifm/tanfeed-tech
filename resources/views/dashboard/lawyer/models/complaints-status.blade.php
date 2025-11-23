@@ -6,7 +6,6 @@
             @csrf
             @method('PATCH')
 
-            <input type="hidden" name="complaint_id" id="complaintId">
 
             {{-- الحالة الحالية --}}
             <div id="currentStatusContainer" class="mb-3 hidden">
@@ -21,6 +20,7 @@
                 <label class="block mb-1 text-gray-700 font-semibold">اختر الحالة الجديدة</label>
                 <select name="status" id="statusSelect"
                     class="w-full border-gray-300 rounded-md shadow-sm focus:ring-green focus:border-green">
+                    <option value="" disabled selected>اختر الحالة</option>
                     <option value="accepted">قبول</option>
                     <option value="suspended">تعليق</option>
                     <option value="pending">قيد المراجعة</option>

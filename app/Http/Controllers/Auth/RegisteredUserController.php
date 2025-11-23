@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Support\Facades\Mail;
 use App\Models\User;
 use App\Models\CompanyProfile;
 use Illuminate\Http\RedirectResponse;
@@ -14,8 +15,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
-use App\Mail\NewUserMail;
-use Illuminate\Support\Facades\Mail;
 
 class RegisteredUserController extends Controller
 {
@@ -43,6 +42,7 @@ class RegisteredUserController extends Controller
 
             // ✅ تحقق من ملفات PDF
             'owner_id_pdf' => ['required', 'file', 'mimes:pdf', 'max:2048'],
+            'national_id' => ['required'],
             'commercial_record_pdf' => ['required', 'file', 'mimes:pdf', 'max:2048'],
         ]);
 
@@ -72,6 +72,7 @@ class RegisteredUserController extends Controller
                 'city' => $request->city,
                 'district' => $request->district,
                 'manager_name' => $request->manager_name,
+                'national_id' => $request->national_id,
                 'phone_1' => $request->phone_1,
                 'phone_2' => $request->phone_2,
                 'company_email' => $request->company_email,
@@ -79,9 +80,6 @@ class RegisteredUserController extends Controller
                 'commercial_record_pdf' => $recordPath,
             ]);
 
-
-            // New user register
-            // Mail::to($user->email)->send(new NewUserMail($user));
             event(new Registered($user));
 
 
@@ -94,16 +92,18 @@ class RegisteredUserController extends Controller
             return redirect()->route('verification.notice')
                 ->with('success', 'تم إنشاء حسابك بنجاح.');
         } catch (\Exception $e) {
-
-            // ❌ أي خطأ يحدث هنا سيتم التراجع عنه
             DB::rollBack();
 
-            // 🔍 تسجيل الخطأ في Log لسهولة تتبعه لاحقًا
             Log::error('Registration failed: ' . $e->getMessage(), [
                 'trace' => $e->getTraceAsString()
             ]);
 
-            // ⚠️ إظهار رسالة ودية للمستخدم
+            // 🧩 Show detailed error only in local environment
+            if (app()->environment('local')) {
+                return back()->withInput()->with('error', 'Error: ' . $e->getMessage());
+            }
+
+            // ⚠️ In production, show a friendly message
             return back()->withInput()->with('error', 'حدث خطأ أثناء التسجيل. يرجى المحاولة مرة أخرى.');
         }
     }

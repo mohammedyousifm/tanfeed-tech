@@ -12,18 +12,8 @@ use App\Http\Controllers\Merchant\SettingsController;
 use App\Http\Controllers\Merchant\NotificationController;
 use App\Http\Controllers\Merchant\ContractController;
 use App\Http\Controllers\ContactController;
-use App\Mail\AdminNewUserRegistered;
-use Illuminate\Support\Facades\Mail;
-use App\Models\User;
 
 
-Route::get('/test-admin-mail', function () {
-    $user = User::first(); // or create a dummy user
-    Mail::to(['mahmadyasaf020@gmail.com', 'mkntttlyayzwl@gmail.com'])
-        ->send(new AdminNewUserRegistered($user));
-
-    return '✅ Test mail sent!';
-});
 
 /*
      |--------------------------------------------------------------------------
@@ -45,6 +35,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/contract/upload', [ContractController::class, 'index'])->name('contract.upload');
     Route::post('/contract/upload', [ContractController::class, 'store'])->name('contract.store');
 });
+
 /*
      |--------------------------------------------------------------------------
      | Authenticated Merchant Routes (Partially Protected)
@@ -98,6 +89,7 @@ Route::middleware(['auth', 'verified', 'merchant'])->group(function () {
     */
     Route::get('/merchant/settings', [SettingsController::class, 'index'])
         ->name('merchant.settings.index');
+
 
     /*
     |----------------------------------------------------------------------

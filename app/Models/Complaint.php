@@ -9,6 +9,7 @@ class Complaint extends Model
 {
     use HasFactory;
 
+    // ✅ Mass assignable attributes
     protected $fillable = [
         'serial_number',
         'user_id',
@@ -33,7 +34,12 @@ class Complaint extends Model
         'status',
     ];
 
-
+    /**
+     * Boot method to automatically generate a unique serial number
+     * when creating a new complaint record.
+     *
+     * The format will be: OR10000, OR10001, OR10002, ...
+     */
     protected static function boot()
     {
         parent::boot();
@@ -53,31 +59,26 @@ class Complaint extends Model
         });
     }
 
-
-    // Relationships
-    public function user()
+    /**
+     * Accessor: Get the Arabic label for the service requested.
+     * Converts percentage values like "10%" into human-readable Arabic text.
+     */
+    public function getServiceRequestedLabelAttribute()
     {
-        return $this->belongsTo(User::class);
+        return match ($this->service_requested) {
+            '8%' => 'تحصيل قبل المحكمة',
+            '10%' => 'تحصيل بسندات تنفيذ',
+            '15%' => 'إجراء قضائي أعلى من 500 ألف',
+            '20%' => 'إجراء قضائي أقل من 500 ألف',
+            '25%' => 'تحصيل الديون المتعثرة',
+            default => $this->service_requested,
+        };
     }
 
-    public function attachments()
-    {
-        return $this->hasMany(ComplaintAttachment::class);
-    }
-
-
-    public function followUps()
-    {
-        return $this->hasMany(FollowUp::class);
-    }
-
-    public function collections()
-    {
-        return $this->hasMany(Collection::class);
-    }
-
-
-
+    /**
+     * Accessor: Get the Arabic label for the complaint status.
+     * Converts status keys like "pending" into Arabic display text.
+     */
     public function getStatusLabelAttribute()
     {
         return match ($this->status) {
@@ -91,11 +92,47 @@ class Complaint extends Model
         };
     }
 
+    /**
+     * Accessor: Get the Arabic label for phone status.
+     */
     public function getphoneStatusLabelAttribute()
     {
         return match ($this->phone_status) {
             'available'     => 'الرقم متاح',
             'not_available' => 'غير متاح',
         };
+    }
+
+
+    /**
+     * Relationship: Complaint belongs to a User (the one who submitted it).
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Relationship: Complaint can have many attachments (files, documents, etc.).
+     */
+    public function attachments()
+    {
+        return $this->hasMany(ComplaintAttachment::class);
+    }
+
+    /**
+     * Relationship: Complaint can have multiple follow-up records (tracking progress).
+     */
+    public function followUps()
+    {
+        return $this->hasMany(FollowUp::class);
+    }
+
+    /**
+     * Relationship: Complaint can have multiple collection records (related payments).
+     */
+    public function collections()
+    {
+        return $this->hasMany(Collection::class);
     }
 }

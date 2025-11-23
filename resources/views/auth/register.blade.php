@@ -41,13 +41,14 @@
                                 <x-input-error :messages="$errors->get('commercial_number')" class="mt-2" />
                             </div>
 
-                            <!-- Activity Type -->
+
+                            <!-- District -->
                             <div>
-                                <label for="activity_type" class="form-label f-12">
-                                    <i class="fas fa-briefcase text-[#e2d392] ml-2"></i> نوع النشاط
+                                <label for="district" class="form-label f-12">
+                                    <i class="fas fa-map-marker-alt text-[#e2d392] ml-2"></i> الحي / المنطقة
                                 </label>
-                                <input type="text" id="activity_type" name="activity_type" class="form-input f-12"
-                                    placeholder="أدخل نوع النشاط" value="{{ old('activity_type') }}" required>
+                                <input type="text" id="district" name="district" class="form-input f-12"
+                                    placeholder="أدخل الحي أو المنطقة" value="{{ old('district') }}" required>
                             </div>
 
                             <!-- City -->
@@ -59,14 +60,17 @@
                                     value="{{ old('city') }}" required>
                             </div>
 
-                            <!-- District -->
+
+                            {{-- national_id --}}
                             <div>
-                                <label for="district" class="form-label f-12">
-                                    <i class="fas fa-map-marker-alt text-[#e2d392] ml-2"></i> الحي / المنطقة
+                                <label for="national_id" class="form-label f-12">
+                                    <i class="fas fa-user-tie text-[#e2d392] ml-2"></i>
+                                    رقم هوية المدير (للشركات) - رقم هوية المالك (للمؤسسات)
                                 </label>
-                                <input type="text" id="district" name="district" class="form-input f-12"
-                                    placeholder="أدخل الحي أو المنطقة" value="{{ old('district') }}" required>
+                                <input type="text" id="national_id" name="national_id" class="form-input f-12"
+                                    placeholder="أدخل اسم" value="{{ old('national_id') }}" required>
                             </div>
+
 
                             <!-- Manager Name -->
                             <div>
@@ -77,6 +81,7 @@
                                 <input type="text" id="manager_name" name="manager_name" class="form-input f-12"
                                     placeholder="أدخل اسم" value="{{ old('manager_name') }}" required>
                             </div>
+
 
                             <!-- Phone 1 -->
                             <div>
@@ -118,6 +123,16 @@
                                 <p id="phone2-error" class="text-red-600 text-sm mt-1 hidden"></p>
                             </div>
 
+                            <!-- Activity Type -->
+                            <div>
+                                <label for="activity_type" class="form-label f-12">
+                                    <i class="fas fa-briefcase text-[#e2d392] ml-2"></i> نوع النشاط
+                                </label>
+                                <input type="text" id="activity_type" name="activity_type" class="form-input f-12"
+                                    placeholder="أدخل نوع النشاط" value="{{ old('activity_type') }}" required>
+                            </div>
+
+
                             <!-- Company Email -->
                             <div>
                                 <label for="company_email" class="form-label f-12">
@@ -127,15 +142,6 @@
                                     placeholder="company@domain.com" value="{{ old('company_email') }}" required>
                             </div>
 
-                            <!-- Account Manager Name -->
-                            <div>
-                                <label for="account_manager_name" class="form-label f-12">
-                                    <i class="fas fa-user text-[#e2d392] ml-2"></i> اسم مسؤول الحساب
-                                </label>
-                                <input type="text" id="account_manager_name" name="account_manager_name"
-                                    class="form-input f-12" placeholder="أدخل اسم المسؤول"
-                                    value="{{ old('account_manager_name') }}" required>
-                            </div>
 
                             <!-- Upload Owner ID -->
                             <div>
@@ -168,6 +174,15 @@
                                     <p class="text-yellow-600 text-xs mt-1">يرجى إعادة رفع الملف.</p>
                                 @endif
                             </div>
+                        </div>
+
+                        <!-- Account Manager Name -->
+                        <div>
+                            <label for="account_manager_name" class="form-label f-12">
+                                <i class="fas fa-user text-[#e2d392] ml-2"></i> اسم مسؤول الحساب
+                            </label>
+                            <input type="text" id="account_manager_name" name="account_manager_name" class="form-input f-12"
+                                placeholder="أدخل اسم المسؤول" value="{{ old('account_manager_name') }}" required>
                         </div>
 
                         <!-- Account Email -->

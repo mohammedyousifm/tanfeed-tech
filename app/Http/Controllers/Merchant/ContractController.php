@@ -92,7 +92,7 @@ class ContractController extends Controller
              * 🔹 4. Send Email Notification to Admin
              * Sends an email with details about the uploaded contracts.
              */
-            $adminEmails = ['mahmadyasaf020@gmail.com', 'mkntttlyayzwl@gmail.com'];
+            $adminEmails = config('mail.admin_emails');
 
             Mail::to($adminEmails)->send(new ContractUploadedMail($user));
 

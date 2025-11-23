@@ -2,31 +2,26 @@
 
 namespace App\Mail;
 
-use App\Models\Complaint;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class ComplaintSuspendedMail extends Mailable
+class ComplaintReceived extends Mailable
 {
     use Queueable, SerializesModels;
 
     public $complaint;
-    public $reason;
-
-    public function __construct(Complaint $complaint, $reason)
+    public function __construct($complaint)
     {
         $this->complaint = $complaint;
-        $this->reason = $reason;
     }
 
     public function build()
     {
-        return $this->subject('تم تعليق طلبك - تنفيذ تك')
-            ->markdown('emails.complaints.suspended')
+        return $this->subject('تم استلام طلب بنجاح')
+            ->view('emails.complaints.complaint-received')
             ->with([
                 'complaint' => $this->complaint,
-                'reason' => $this->reason,
             ]);
     }
 }

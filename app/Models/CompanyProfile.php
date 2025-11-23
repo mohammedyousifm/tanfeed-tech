@@ -20,6 +20,7 @@ class CompanyProfile extends Model
         'phone_1',
         'phone_2',
         'company_email',
+        'national_id',
         'owner_id_pdf',
         'commercial_record_pdf',
     ];

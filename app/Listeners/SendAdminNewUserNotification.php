@@ -12,7 +12,8 @@ class SendAdminNewUserNotification
     {
         $user = $event->user;
 
-        Mail::to(['mahmadyasaf020@gmail.com', 'mkntttlyayzwl@gmail.com'])
+        $adminEmail = config('mail.admin_emails');
+        Mail::to($adminEmail)
             ->send(new AdminNewUserRegistered($user));
     }
 }

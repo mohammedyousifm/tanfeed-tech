@@ -227,21 +227,6 @@
                     <input type="text" id="contract_number" name="contract_number"
                         class="form-input f-13 w-full px-3 py-2 rounded-md" placeholder="أدخل رقم العقد" required>
                 </div>
-
-                <div>
-                    <label for="service_requested" class="form-label">
-                        الخدمة المطلوبة <span class="text-red-500">*</span>
-                    </label>
-                    <select id="service_requested" name="service_requested"
-                        class="form-input f-13 w-full px-3 py-2 rounded-md" required>
-                        <option value="">اختر الخدمة</option>
-                        <option value="8%">تحصيل قبل المحكمة</option>
-                        <option value="10%">بعد التنفيذ</option>
-                        <option value="10%">إجراء قضائي أعلى من 500 ألف</option>
-                        <option value="20%">إجراء قضائي أقل من 500 ألف</option>
-                        <option value="25%">تحصيل الديون المتعثرة</option>
-                    </select>
-                </div>
             </div>
         </div>
 

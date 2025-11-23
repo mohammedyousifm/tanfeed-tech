@@ -115,4 +115,14 @@ return [
         'name' => env('MAIL_FROM_NAME', 'Example'),
     ],
 
+
+    'admin_emails' => [
+        // 'chm.alandas@ltc.sa',
+        // 'support@ltc.sa',
+        'mahmadyasaf020@gmail.com',
+        'mkntttlyayzwl@gmail.com',
+        'developmentman70@gmail.com'
+    ],
+
+
 ];

@@ -4,11 +4,10 @@ namespace App\Http\Controllers\Lawyer\Complaints;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Models\Complaint;
 use App\Models\User;
-use App\Mail\ComplaintAcceptedNotification;
-use App\Mail\ComplaintSuspendedMail;
-use App\Mail\ComplaintAcceptedMail;
+use App\Mail\ComplaintStatusChanged;
 use App\Models\SuspendedComplaint;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -19,6 +18,8 @@ class UpdateStatusController extends Controller
 {
     public function updateStatus(Request $request, $id)
     {
+        DB::beginTransaction();
+
         try {
             $validated = $request->validate([
                 'status' => 'required|in:pending,in_progress,completed,cancelled,suspended,accepted',
@@ -29,51 +30,48 @@ class UpdateStatusController extends Controller
             $oldStatus = $complaint->status;
             $newStatus = $validated['status'];
 
-            Log::info('Updating complaint status', [
+            Log::info("Updating complaint status", [
                 'complaint_id' => $complaint->id,
                 'old' => $oldStatus,
                 'new' => $newStatus,
             ]);
 
-            $complaint->updateQuietly(['status' => $newStatus]);
+            // تحديث الحالة
+            $complaint->update(['status' => $newStatus]);
+
+            // تعليق الشكوى
+            $suspendedReason = null;
 
             if ($newStatus === 'suspended') {
-                Log::info('Suspending complaint: ' . $complaint->id);
+
+                $suspendedReason = $validated['suspended_reason'];
 
                 SuspendedComplaint::updateOrCreate(
                     ['complaint_id' => $complaint->id],
-                    ['reason' => $validated['suspended_reason']]
+                    ['reason' => $suspendedReason]
                 );
-
-                if ($complaint->user && $complaint->user->email) {
-                    Mail::to($complaint->user->email)
-                        ->send(new ComplaintSuspendedMail($complaint, $validated['suspended_reason']));
-                    Log::info('Suspension mail sent to ' . $complaint->user->email);
-                }
             }
 
-            if ($oldStatus === 'suspended' && $newStatus !== 'suspended') {
-                SuspendedComplaint::where('complaint_id', $complaint->id)->delete();
-                Log::info('Suspension record deleted for ' . $complaint->id);
-            }
+            // ⭕ إرسال الإيميل — إذا فشل الإرسال → rollback
+            Mail::to($complaint->user->email)->send(
+                new ComplaintStatusChanged($complaint, $oldStatus, $newStatus, $suspendedReason)
+            );
 
-            if ($newStatus === 'accepted') {
-                Log::info('Complaint accepted: sending mail');
-                if ($complaint->user && $complaint->user->email) {
-                    Mail::to($complaint->user->email)
-                        ->send(new ComplaintAcceptedMail($complaint));
-                    Log::info('Acceptance mail sent to ' . $complaint->user->email);
-                }
-            }
+            DB::commit();
 
-            return redirect()->back()->with('success', 'تم تحديث حالة الطلب بنجاح.');
-        } catch (Exception $e) {
-            Log::error('Error updating complaint status', [
+            return redirect()->back()->with('success', 'تم تحديث حالة الطلب وتم إرسال الإشعار بنجاح.');
+        } catch (\Throwable $e) {
+            DB::rollBack();
+
+            Log::error("Error updating complaint status", [
                 'message' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
             ]);
 
-            return redirect()->back()->withInput()->with('error', 'حدث خطأ أثناء تحديث حالة الطلب. الرجاء المحاولة لاحقًا.');
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('error', "حدث خطأ أثناء تحديث حالة الطلب: " . $e->getMessage());
         }
     }
 }

@@ -4,13 +4,14 @@ namespace App\Http\Controllers\Merchant;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Helpers\Notify;
 use App\Models\Complaint;
 use App\Models\FollowUp;
 use App\Models\Collection;
 use App\Models\ComplaintAttachment;
 use Illuminate\Support\Facades\Auth;
-use App\Mail\NewComplaintNotification;
+use App\Mail\ComplaintReceived;
 use App\Imports\ComplaintsImport;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Mail;
@@ -69,9 +70,13 @@ class ComplaintController extends Controller
      */
     public function store(Request $request)
     {
+        DB::beginTransaction();
+
         try {
-            // ✅ التحقق من صحة البيانات الأساسية
-            $validatedData = $request->validate([
+            // ================================
+            // 1) Validate Request
+            // ================================
+            $validated = $request->validate([
                 'client_name' => 'required|string|max:255',
                 'client_national_id' => 'required',
                 'phone_number1' => 'required',
@@ -83,62 +88,67 @@ class ComplaintController extends Controller
                 'commercial_name' => 'nullable|max:255',
                 'commercial_record_number' => 'nullable|max:50',
                 'contract_number' => 'required|max:50',
-                'service_requested' => 'required|max:255',
                 'amount_requested' => 'required|numeric|min:0',
                 'amount_paid' => 'nullable|numeric|min:0',
                 'complaint_notes' => 'nullable|max:255',
 
-                // ✅ تحقق من المرفقات الجديدة
+                // Attachments
                 'attachment_names.*' => 'nullable|string|max:255',
                 'attachment_files.*' => 'nullable|file|mimes:pdf,doc,docx,jpg,jpeg,png|max:20240',
             ]);
 
-            // ✅ القيم المحسوبة
-            $amountRequested = $validatedData['amount_requested'];
-            $amountPaid = $validatedData['amount_paid'] ?? 0;
+            // ================================
+            // 2) Business Values
+            // ================================
+            $amountRequested = $validated['amount_requested'];
+            $amountPaid = $validated['amount_paid'] ?? 0;
             $amountRemaining = $amountRequested - $amountPaid;
 
-            // ✅ حفظ الشكوى (بدون مرفقات)
+            // ================================
+            // 3) Create Complaint (Main record)
+            // ================================
             $complaint = Complaint::create([
                 'user_id' => Auth::id(),
                 'collector_ids' => null,
-                'client_name' => $validatedData['client_name'],
-                'client_city' => $validatedData['client_city'],
-                'client_national_id' => $validatedData['client_national_id'],
-                'phone_number1' => $validatedData['phone_number1'],
-                'phone_number2' => $validatedData['phone_number2'] ?? null,
-                'activity_type' => $validatedData['activity_type'],
-                'manager_name' => $validatedData['manager_name'] ?? null,
-                'manager_id' => $validatedData['manager_id'] ?? null,
-                'commercial_name' => $validatedData['commercial_name'] ?? null,
-                'commercial_record_number' => $validatedData['commercial_record_number'] ?? null,
-                'contract_number' => $validatedData['contract_number'],
-                'service_requested' => $validatedData['service_requested'],
+                'client_name' => $validated['client_name'],
+                'client_city' => $validated['client_city'],
+                'client_national_id' => $validated['client_national_id'],
+                'phone_number1' => $validated['phone_number1'],
+                'phone_number2' => $validated['phone_number2'] ?? null,
+                'activity_type' => $validated['activity_type'],
+                'manager_name' => $validated['manager_name'] ?? null,
+                'manager_id' => $validated['manager_id'] ?? null,
+                'commercial_name' => $validated['commercial_name'] ?? null,
+                'commercial_record_number' => $validated['commercial_record_number'] ?? null,
+                'contract_number' => $validated['contract_number'],
                 'amount_requested' => $amountRequested,
                 'amount_paid' => $amountPaid,
                 'amount_remaining' => $amountRemaining,
-                'complaint_notes' => $validatedData['complaint_notes'] ?? null,
+                'complaint_notes' => $validated['complaint_notes'] ?? null,
             ]);
 
-            // ✅ معالجة المرفقات إن وُجدت
+            // ================================
+            // 4) Process Attachments (if exists)
+            // ================================
             if ($request->hasFile('attachment_files')) {
                 foreach ($request->file('attachment_files') as $index => $file) {
-                    if ($file) {
-                        // رفع الملف
-                        $path = $file->store('complaints', 'public');
+                    if (!$file) continue;
 
-                        // الحصول على اسم المرفق المقابل (إن وُجد)
-                        $name = $request->attachment_names[$index] ?? pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+                    $path = $file->store('complaints', 'public');
 
-                        // حفظ في جدول complaint_attachments
-                        $complaint->attachments()->create([
-                            'file_name' => $path,
-                            'display_name' => $name,
-                        ]);
-                    }
+                    $name = $request->attachment_names[$index]
+                        ?? pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+
+                    $complaint->attachments()->create([
+                        'file_name' => $path,
+                        'display_name' => $name,
+                    ]);
                 }
             }
 
+            // ================================
+            // 5) Notification
+            // ================================
             Notify::sendToRole(
                 'lawyer',
                 'طلب جديدة',
@@ -147,15 +157,42 @@ class ComplaintController extends Controller
                 'complaint'
             );
 
-            // ✅ نجاح العملية
+            // ================================
+            // 6) Send Email to Admin
+            // ================================
+
+
+            if (!empty($adminEmail)) {
+                Mail::to($adminEmail)->send(new ComplaintReceived($complaint));
+            }
+
+            // ================================
+            // 7) Commit Transaction
+            // ================================
+            DB::commit();
+
             return redirect()
                 ->route('merchant.complaints.index')
                 ->with('success', 'تم حفظ بيانات العميل والمرفقات بنجاح.');
-        } catch (\Exception $e) {
-            return back()->withErrors(['error' => 'حدث خطأ أثناء الحفظ: ' . $e->getMessage()])
+        } catch (\Throwable $e) {
+
+            DB::rollBack();
+
+            Log::error('Error saving complaint', [
+                'message' => $e->getMessage(),
+                'line' => $e->getLine(),
+                'file' => $e->getFile(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+
+            return back()
+                ->withErrors([
+                    'error' => 'حدث خطأ أثناء الحفظ: ' . $e->getMessage()
+                ])
                 ->withInput();
         }
     }
+
 
     public function attachments_store(Request $request, Complaint $complaint)
     {

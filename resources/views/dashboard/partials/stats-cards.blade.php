@@ -103,7 +103,8 @@
 
 @elseif (Auth::user()->role === 'collector')
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 mb-6">
-        <div class="stat-card bg-white p-4 rounded-lg shadow-sm">
+
+        <a href="{{ route('collector.complaints.index') }}" class="stat-card bg-white p-4 rounded-lg shadow-sm">
             <div class="flex items-center justify-between mb-4">
                 <div class="w-12 h-12 bg-gray-100 rounded-md flex items-center justify-center">
                     <i class="fas fa-folder-open text-gray-600 text-xl"></i>
@@ -111,7 +112,7 @@
             </div>
             <h3 class="text-gray-500 text-sm mb-1">إجمالي الطلبات</h3>
             <p class="text-2xl font-bold text-black">{{ $totalCollectorComplaints }}</p>
-        </div>
+        </a>
 
         <div class="stat-card bg-white p-4 rounded-lg shadow-sm">
             <div class="flex items-center justify-between mb-4">

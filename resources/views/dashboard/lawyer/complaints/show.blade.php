@@ -29,19 +29,21 @@
                 <div><strong>الاسم التجاري:</strong> {{ $complaint->commercial_name }}</div>
                 <div><strong>رقم السجل التجاري:</strong> {{ $complaint->commercial_record_number }}</div>
                 <div><strong>رقم العقد:</strong> {{ $complaint->contract_number }}</div>
-                <div><strong>الخدمة المطلوبة:</strong> {{ $complaint->service_requested }}</div>
+                <div class="cursor-pointer text-[#1B7A75]" onclick="openServiceModal({{ $complaint->id }})"><strong>الخدمة
+                        المطلوبة:</strong> {{ $complaint->service_requested_label }}</div>
                 <div><strong>المبلغ المطلوب:</strong> {{ number_format($complaint->amount_requested, 2) }} ر.س</div>
                 <div><strong>المبلغ المدفوع:</strong> {{ number_format($complaint->amount_paid, 2) }} ر.س</div>
                 <div><strong>المبلغ المتبقي:</strong> {{ number_format($complaint->amount_remaining, 2) }} ر.س</div>
 
                 <div>
                     <strong>الحالة:</strong>
-                    <span class="px-3 py-1 rounded-full text-xs font-medium
-                                                                        @if($complaint->status === 'pending') bg-yellow-100 text-yellow-800
-                                                                        @elseif($complaint->status === 'completed') bg-green-100 text-green-800
-                                                                        @elseif($complaint->status === 'cancelled') bg-red-100 text-red-700
-                                                                        @elseif($complaint->status === 'in_progress') bg-blue-100 text-blue-800
-                                                                        @else bg-gray-100 text-gray-700 @endif">
+                    <span
+                        class="px-3 py-1 rounded-full text-xs font-medium
+                                                                                                                                            @if($complaint->status === 'pending') bg-yellow-100 text-yellow-800
+                                                                                                                                            @elseif($complaint->status === 'completed') bg-green-100 text-green-800
+                                                                                                                                            @elseif($complaint->status === 'cancelled') bg-red-100 text-red-700
+                                                                                                                                            @elseif($complaint->status === 'in_progress') bg-blue-100 text-blue-800
+                                                                                                                                            @else bg-gray-100 text-gray-700 @endif">
                         {{ $complaint->status_label }}
                     </span>
                 </div>
@@ -50,6 +52,19 @@
                 <div><strong>آخر تحديث:</strong> {{ $complaint->updated_at->format('Y-m-d') }}</div>
             </div>
         </section>
+
+        {{-- complaint notes --}}
+        @if ($complaint->complaint_notes)
+            <section class="mb-10">
+                <h3 class="text-lg font-semibold text-[#1B7A75] border-b-2 border-[#1B7A75]/10 pb-2 mb-4">
+                    🧾ملاحظات من التاجر
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm leading-6 text-gray-700">
+                    <p>{{ $complaint->complaint_notes }}</p>
+                </div>
+            </section>
+        @endif
+
 
         <!-- Attachments -->
         @if($complaint->attachments->isNotEmpty())
@@ -91,6 +106,9 @@
             </div>
         </section>
     </div>
+
+    {{-- Model --}}
+    @include('dashboard.lawyer.models.serviceModal')
 
     <!-- Phone Update Modal -->
     <div id="phoneModal"

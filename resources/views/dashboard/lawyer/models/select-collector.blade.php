@@ -12,6 +12,7 @@
                 <label class="block mb-2 font-semibold text-gray-700">اختر المحصلين</label>
                 <select name="collector_id" id="collectorSelect"
                     class="w-full border-gray-300 rounded-md shadow-sm focus:ring-green focus:border-green">
+                    <option value="" disabled selected>اختر المحصل</option>
                     @foreach (\App\Models\User::where('role', 'collector')->get() as $user)
                         <option value="{{ $user->id }}">{{ $user->name }}</option>
                     @endforeach

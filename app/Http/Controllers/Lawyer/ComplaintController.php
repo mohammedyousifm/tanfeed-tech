@@ -52,8 +52,16 @@ class ComplaintController extends Controller
         return view('dashboard.lawyer.complaints.index', compact('complaints', 'user'));
     }
 
-
-
+    /**
+     * Update the collector assigned to the complaint.
+     *
+     * Validates that the provided collector ID exists in the users table,
+     * then updates the complaint's collector_id field accordingly.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id  Complaint ID
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function updateCollectors(Request $request, $id)
     {
 
@@ -69,6 +77,30 @@ class ComplaintController extends Controller
 
         return redirect()->back()->with('success', 'تم تحديث المحصلين بنجاح');
     }
+
+    /**
+     * Update the requested service for the complaint.
+     *
+     * Validates the selected service, retrieves the complaint by ID,
+     * updates the service_requested value, and saves the changes.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id  Complaint ID
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function updateService(Request $request, $id)
+    {
+        $request->validate([
+            'service_requested' => 'required|string'
+        ]);
+
+        $complaint = Complaint::findOrFail($id);
+        $complaint->service_requested = $request->service_requested;
+        $complaint->save();
+
+        return back()->with('success', 'تم تحديث الخدمة المطلوبة بنجاح');
+    }
+
 
     /**
      * Display the specified complaint with merchant details.
